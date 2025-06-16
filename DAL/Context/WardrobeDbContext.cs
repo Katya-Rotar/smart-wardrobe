@@ -13,7 +13,6 @@ public class WardrobeDbContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
-    public DbSet<Profile> Profiles { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<TemperatureSuitability> TemperatureSuitabilities { get; set; }
     public DbSet<Type> Types { get; set; }
@@ -44,7 +43,6 @@ public class WardrobeDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
-        modelBuilder.ApplyConfiguration(new ProfileConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         modelBuilder.ApplyConfiguration(new TemperatureSuitabilityConfiguration());
         modelBuilder.ApplyConfiguration(new TypeConfiguration());
@@ -89,7 +87,6 @@ public class WardrobeDbContext : DbContext
         modelBuilder.Entity<OutfitStyle>().HasData(DataSeeder.GenerateOutfitStyles());
         modelBuilder.Entity<OutfitTag>().HasData(DataSeeder.GenerateOutfitTags());
         modelBuilder.Entity<PostLike>().HasData(DataSeeder.GeneratePostLikes());
-        modelBuilder.Entity<Profile>().HasData(DataSeeder.GenerateProfiles());
         modelBuilder.Entity<Publication>().HasData(DataSeeder.GeneratePublications());
         modelBuilder.Entity<PublicationTag>().HasData(DataSeeder.GeneratePublicationTags());
         modelBuilder.Entity<SavedPost>().HasData(DataSeeder.GenerateSavedPosts());

@@ -19,5 +19,13 @@ public class User
     public IEnumerable<Notification> Notifications { get; set; } = new List<Notification>();
     public IEnumerable<Event> Events { get; set; } = new List<Event>();
     public IEnumerable<ClothingItem> ClothingItems { get; set; } = new List<ClothingItem>();
-    public Profile Profile { get; set; }
+    
+    public IEnumerable<SavedPost>? SavedPosts { get; set; } = new List<SavedPost>();
+    public IEnumerable<Publication>? Publications { get; set; } = new List<Publication>();
+    public IEnumerable<PostLike>? PostLikes { get; set; } = new List<PostLike>();
+    public IEnumerable<CommentLike>? CommentLikes { get; set; } = new List<CommentLike>();
+    public IEnumerable<Comment>? Comments { get; set; } = new List<Comment>();
+    
+    public IEnumerable<Follower>? Followers { get; set; } = new List<Follower>();
+    public IEnumerable<Follower>? Following { get; set; } = new List<Follower>();
 }

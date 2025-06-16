@@ -143,7 +143,7 @@ public abstract class DataSeeder
             new Comment
             {
                 Id = 1,
-                ProfileID = 1,         // Profile 1
+                UserID = 1,         // Profile 1
                 PublicationID = 1,     // Publication 1
                 Content = "Great outfit!",
                 CreatedAt = new DateTime(2025, 5, 10, 0, 0, 0, DateTimeKind.Utc)
@@ -151,7 +151,7 @@ public abstract class DataSeeder
             new Comment
             {
                 Id = 2,
-                ProfileID = 2,         // Profile 2
+                UserID = 2,         // Profile 2
                 PublicationID = 1,     // Publication 1
                 Content = "Where did you get those shoes?",
                 CreatedAt = new DateTime(2025, 5, 7, 0, 0, 0, DateTimeKind.Utc)
@@ -166,13 +166,13 @@ public abstract class DataSeeder
             new CommentLike
             {
                 Id = 1,
-                ProfileID = 2,
+                UserID = 2,
                 CommentID = 1
             },
             new CommentLike
             {
                 Id = 3,
-                ProfileID = 1,
+                UserID = 1,
                 CommentID = 2
             }
         ];
@@ -339,30 +339,8 @@ public abstract class DataSeeder
     public static IReadOnlyCollection<PostLike> GeneratePostLikes()
     {
         return [
-            new PostLike {Id = 1, ProfileID = 1, PublicationID = 1},
-            new PostLike {Id = 2, ProfileID = 2, PublicationID = 1}
-        ];
-    }
-
-    public static IReadOnlyCollection<Profile> GenerateProfiles()
-    {
-        return [
-            new Profile
-            {
-                Id = 1,
-                UserID = 1,
-                Username = "fashionlover123",
-                ProfileImage = "https://i.pinimg.com/564x/39/33/f6/3933f64de1724bb67264818810e3f2cb.jpg",
-                Bio = "Lover of vintage style and cozy sweaters."
-            },
-            new Profile
-            {
-                Id = 2,
-                UserID = 2,
-                Username = "Anna",
-                ProfileImage = "https://cdn.expertphotography.com/wp-content/uploads/2020/08/social-media-profile-photos.jpg",
-                Bio = "Streetwear is my passion."
-            }
+            new PostLike {Id = 1, UserID = 1, PublicationID = 1},
+            new PostLike {Id = 2, UserID = 2, PublicationID = 1}
         ];
     }
 
@@ -372,7 +350,7 @@ public abstract class DataSeeder
             new Publication
             {
                 Id = 1,
-                ProfileID = 1,
+                UserID = 1,
                 OutfitID = 1,
                 ImageURL = "https://fashionjackson.com/wp-content/uploads/2017/06/Fashion-Jackson-Everlane-White-Tshirt-Zara-Ripped-Black-Skinny-Jeans.jpg",
                 CommentingOptions = true
@@ -391,7 +369,7 @@ public abstract class DataSeeder
     public static IReadOnlyCollection<SavedPost> GenerateSavedPosts()
     {
         return [
-            new SavedPost { Id = 1, ProfileID = 1, PublicationID = 1}
+            new SavedPost { Id = 1, UserID = 1, PublicationID = 1}
         ];
     }
 
