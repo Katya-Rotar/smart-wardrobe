@@ -2,6 +2,7 @@
 using BLL.DTO.Category;
 using BLL.DTO.Outfit;
 using BLL.DTO.OutfitGroup;
+using BLL.DTO.Publication;
 using BLL.DTO.Season;
 using BLL.DTO.Style;
 using BLL.DTO.Tag;
@@ -61,6 +62,35 @@ public class MappingProfile : Profile
         
         CreateMap<OutfitGroup, OutfitGroupDto>().ReverseMap();
         CreateMap<OutfitGroup, CreateOutfitGroupDto>().ReverseMap();
+
+        CreateMap<Publication, PublicationDto>()
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.PublicationTags.Select(pt => pt.Tag.TagName)))
+            .ReverseMap()
+            .ForMember(dest => dest.PublicationTags, opt => opt.Ignore());
+        CreateMap<Publication, PublicationListDto>()
+            .ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.ImageURL))
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.PublicationTags.Select(pt => pt.Tag.TagName)))
+            .ReverseMap();
+        CreateMap<Publication, PublicationDetailsDto>()
+            .ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.ImageURL))
+            .ForMember(dest => dest.CommentingOptions, opt => opt.MapFrom(src => src.CommentingOptions))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
+            .ForMember(dest => dest.UserImage, opt => opt.MapFrom(src => src.User.ProfileImage))
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.PublicationTags.Select(pt => pt.Tag.TagName)))
+            .ForMember(dest => dest.OutfitItemImages, opt => opt.MapFrom(src =>
+                src.Outfit.Items
+                    .Where(i => i.ClothingItem != null)
+                    .Select(i => new OutfitItemsDto
+                    {
+                        Id = i.ClothingItem.Id,
+                        Name = i.ClothingItem.Name,
+                        ImageURL = i.ClothingItem.ImageURL
+                    }).ToList()))
+            .ReverseMap();
+        CreateMap<Publication, UpdatePublicationDto>()
+            .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.PublicationTags.Select(pt => pt.Tag.TagName)))
+            .ReverseMap()
+            .ForMember(dest => dest.PublicationTags, opt => opt.Ignore());
         
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<CreateUserDto, User>().ReverseMap();

@@ -29,14 +29,15 @@ namespace API.Controllers
             var tag = await _tagService.GetTagByIdAsync(id);
             return Ok(tag);
         }
-
-        [Authorize]
-        [HttpPost]
-        public async Task<ActionResult> AddTagAsync([FromBody] CreateTagDto createTagDto, CancellationToken cancellationToken)
+        
+        [HttpGet("search")]
+        public async Task<ActionResult<List<TagDto>>> SearchTags([FromQuery] string query)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            var tagId = await _tagService.AddTagAsync(createTagDto, cancellationToken);
-            return CreatedAtAction(nameof(GetTagById), new { id = tagId }, createTagDto);
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("Query is required");
+
+            var tags = await _tagService.SearchTagsAsync(query);
+            return Ok(tags);
         }
     }
 }
