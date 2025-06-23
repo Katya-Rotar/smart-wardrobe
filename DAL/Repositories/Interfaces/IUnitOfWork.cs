@@ -14,6 +14,7 @@ public interface IUnitOfWork : IDisposable
     IUserRepository Users { get; }
     IPublicationRepository Publications { get; }
     IPublicationTagRepository PublicationTags { get; }
+    IFollowerRepository Followers { get; }
     Task SaveAsync();
     Task BeginTransactionAsync(CancellationToken cancellationToken);
     Task CommitTransactionAsync(CancellationToken cancellationToken);

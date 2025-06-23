@@ -21,12 +21,14 @@ public class UnitOfWork : IUnitOfWork
     public IUserRepository Users { get; }
     public IPublicationRepository Publications { get; }
     public IPublicationTagRepository PublicationTags { get; }
+    public IFollowerRepository Followers { get; }
 
     public UnitOfWork(WardrobeDbContext context,
         IClothingItemRepository clothingItem, ICategoryRepository categories, ITypeRepository types, 
         ITemperatureSuitabilityRepository temperatureSuitability, IStyleRepository styles,
         ISeasonRepository seasons, ITagRepository tags, IOutfitRepository outfits, IOutfitGroupRepository outfitGroups,
-        IUserRepository users, IPublicationRepository publications, IPublicationTagRepository publicationTags)
+        IUserRepository users, IPublicationRepository publications, IPublicationTagRepository publicationTags,
+        IFollowerRepository followers)
     {
         _context = context;
         ClothingItems = clothingItem;
@@ -41,6 +43,7 @@ public class UnitOfWork : IUnitOfWork
         Users = users;
         Publications = publications;
         PublicationTags = publicationTags;
+        Followers = followers;
     }
 
     public void Dispose()

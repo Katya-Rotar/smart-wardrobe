@@ -77,5 +77,17 @@ namespace API.Controllers
             await _publicationService.DeletePublicationAsync(id, cancellationToken);
             return NoContent();
         }
+        
+        [Authorize]
+        [HttpGet("followings")]
+        public async Task<ActionResult<PagedList<PublicationListDto>>> GetFollowingsPublications([FromQuery] PublicationParams parameters)
+        {
+            var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken == null || !int.TryParse(userIdFromToken, out var userId))
+                return Unauthorized("Invalid token.");
+
+            var publications = await _publicationService.GetFollowingsPublicationsAsync(userId, parameters);
+            return Ok(publications);
+        }
     }
 }

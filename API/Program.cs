@@ -83,6 +83,7 @@ builder.Services.AddScoped<IOutfitGroupRepository, OutfitGroupRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
 builder.Services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
+builder.Services.AddScoped<IFollowerRepository, FollowerRepository>();
 
 // Services
 builder.Services.AddScoped<IClothingItemService, ClothingItemService>();
@@ -96,6 +97,7 @@ builder.Services.AddScoped<IOutfitService, OutfitService>();
 builder.Services.AddScoped<IOutfitGroupService, OutfitGroupService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPublicationService, PublicationService>();
+builder.Services.AddScoped<IFollowerService, FollowerService>();
 
 builder.Services.AddCors(options =>
 {

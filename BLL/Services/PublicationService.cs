@@ -146,4 +146,10 @@ public class PublicationService : IPublicationService
             throw;
         }
     }
+    
+    public async Task<PagedList<PublicationListDto>> GetFollowingsPublicationsAsync(int userId, PublicationParams parameters)
+    {
+        var publications = await _unitOfWork.Publications.GetPublicationsOfFollowingsAsync(userId, parameters);
+        return _mapper.Map<PagedList<PublicationListDto>>(publications);
+    }
 }

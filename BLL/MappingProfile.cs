@@ -1,5 +1,6 @@
 ﻿using BLL.DTO;
 using BLL.DTO.Category;
+using BLL.DTO.Follower;
 using BLL.DTO.Outfit;
 using BLL.DTO.OutfitGroup;
 using BLL.DTO.Publication;
@@ -91,6 +92,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.PublicationTags.Select(pt => pt.Tag.TagName)))
             .ReverseMap()
             .ForMember(dest => dest.PublicationTags, opt => opt.Ignore());
+
+        CreateMap<User, UserShortDto>().ReverseMap();
+        CreateMap<Follower, FollowerDto>().ReverseMap();
         
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<CreateUserDto, User>().ReverseMap();

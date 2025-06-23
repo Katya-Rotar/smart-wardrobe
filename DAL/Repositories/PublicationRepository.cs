@@ -83,4 +83,21 @@ public class PublicationRepository : GenericRepository<Publication>, IPublicatio
         return Task.FromResult(PagedList<Publication>.ToPagedList(query, parameters.PageNumber, parameters.PageSize));
 
     }
+    
+    public async Task<PagedList<Publication>> GetPublicationsOfFollowingsAsync(int userId, PublicationParams parameters)
+    {
+        var followingIds = await context.Followers
+            .Where(f => f.FollowerID == userId)
+            .Select(f => f.FollowingID)
+            .ToListAsync();
+
+        var query = context.Publications
+            .Where(p => followingIds.Contains(p.UserID))
+            .Include(p => p.PublicationTags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.User)
+            .Include(p => p.Outfit).ThenInclude(o => o.Items)
+            .AsQueryable();
+
+        return PagedList<Publication>.ToPagedList(query, parameters.PageNumber, parameters.PageSize);
+    }
 }
