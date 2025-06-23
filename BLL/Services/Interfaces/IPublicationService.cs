@@ -14,4 +14,5 @@ public interface IPublicationService
     Task UpdatePublicationAsync(int id, UpdatePublicationDto publicationDto, CancellationToken cancellationToken);
     Task DeletePublicationAsync(int id, CancellationToken cancellationToken);
     Task<PagedList<PublicationListDto>> GetFollowingsPublicationsAsync(int userId, PublicationParams parameters);
+    Task<PagedList<PublicationListDto>> GetSavedPublicationsAsync(int userId, PublicationParams parameters);
 }

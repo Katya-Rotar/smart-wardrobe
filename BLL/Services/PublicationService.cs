@@ -152,4 +152,10 @@ public class PublicationService : IPublicationService
         var publications = await _unitOfWork.Publications.GetPublicationsOfFollowingsAsync(userId, parameters);
         return _mapper.Map<PagedList<PublicationListDto>>(publications);
     }
+    
+    public async Task<PagedList<PublicationListDto>> GetSavedPublicationsAsync(int userId, PublicationParams parameters)
+    {
+        var publications = await _unitOfWork.Publications.GetSavedPublicationsAsync(userId, parameters);
+        return _mapper.Map<PagedList<PublicationListDto>>(publications);
+    }
 }

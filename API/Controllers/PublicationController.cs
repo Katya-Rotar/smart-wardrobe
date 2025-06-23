@@ -89,5 +89,17 @@ namespace API.Controllers
             var publications = await _publicationService.GetFollowingsPublicationsAsync(userId, parameters);
             return Ok(publications);
         }
+        
+        [Authorize]
+        [HttpGet("saved")]
+        public async Task<ActionResult<PagedList<PublicationListDto>>> GetSavedPublications([FromQuery] PublicationParams parameters)
+        {
+            var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken == null || !int.TryParse(userIdFromToken, out var userId))
+                return Unauthorized("Invalid token.");
+
+            var publications = await _publicationService.GetSavedPublicationsAsync(userId, parameters);
+            return Ok(publications);
+        }
     }
 }

@@ -100,4 +100,21 @@ public class PublicationRepository : GenericRepository<Publication>, IPublicatio
 
         return PagedList<Publication>.ToPagedList(query, parameters.PageNumber, parameters.PageSize);
     }
+    
+    public async Task<PagedList<Publication>> GetSavedPublicationsAsync(int userId, PublicationParams parameters)
+    {
+        var savedPublicationIds = await context.SavedPosts
+            .Where(sp => sp.UserID == userId)
+            .Select(sp => sp.PublicationID)
+            .ToListAsync();
+
+        var query = context.Publications
+            .Where(p => savedPublicationIds.Contains(p.Id))
+            .Include(p => p.PublicationTags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.User)
+            .Include(p => p.Outfit).ThenInclude(o => o.Items)
+            .AsQueryable();
+
+        return PagedList<Publication>.ToPagedList(query, parameters.PageNumber, parameters.PageSize);
+    }
 }

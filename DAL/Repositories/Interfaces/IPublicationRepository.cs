@@ -10,4 +10,5 @@ public interface IPublicationRepository : IGenericRepository<Publication>
     Task<Publication?> GetPublicationDetailsAsync(int id);
     Task<PagedList<Publication>> GetByUserAsync(int userId, PublicationParams parameters);
     Task<PagedList<Publication>> GetPublicationsOfFollowingsAsync(int userId, PublicationParams parameters);
+    Task<PagedList<Publication>> GetSavedPublicationsAsync(int userId, PublicationParams parameters);
 }

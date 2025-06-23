@@ -4,6 +4,7 @@ using BLL.DTO.Follower;
 using BLL.DTO.Outfit;
 using BLL.DTO.OutfitGroup;
 using BLL.DTO.Publication;
+using BLL.DTO.SavedPost;
 using BLL.DTO.Season;
 using BLL.DTO.Style;
 using BLL.DTO.Tag;
@@ -95,6 +96,8 @@ public class MappingProfile : Profile
 
         CreateMap<User, UserShortDto>().ReverseMap();
         CreateMap<Follower, FollowerDto>().ReverseMap();
+
+        CreateMap<SavedPost, SavedPostDto>().ReverseMap();
         
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<CreateUserDto, User>().ReverseMap();
