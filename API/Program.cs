@@ -85,6 +85,7 @@ builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
 builder.Services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
 builder.Services.AddScoped<IFollowerRepository, FollowerRepository>();
 builder.Services.AddScoped<ISavedPostRepository, SavedPostRepository>();
+builder.Services.AddScoped<IPostLikeRepository, PostLikeRepository>();
 
 // Services
 builder.Services.AddScoped<IClothingItemService, ClothingItemService>();
@@ -100,6 +101,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPublicationService, PublicationService>();
 builder.Services.AddScoped<IFollowerService, FollowerService>();
 builder.Services.AddScoped<ISavedPostService, SavedPostService>();
+builder.Services.AddScoped<IPostLikeService, PostLikeService>();
 
 builder.Services.AddCors(options =>
 {
