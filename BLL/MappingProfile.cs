@@ -1,5 +1,7 @@
 ﻿using BLL.DTO;
 using BLL.DTO.Category;
+using BLL.DTO.Comment;
+using BLL.DTO.CommentLike;
 using BLL.DTO.Follower;
 using BLL.DTO.Outfit;
 using BLL.DTO.OutfitGroup;
@@ -101,6 +103,13 @@ public class MappingProfile : Profile
         CreateMap<SavedPost, SavedPostDto>().ReverseMap();
 
         CreateMap<PostLike, PostLikeDto>().ReverseMap();
+        
+        CreateMap<Comment, CommentDto>()
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
+            .ForMember(dest => dest.ProfileImage, opt => opt.MapFrom(src => src.User.ProfileImage));
+
+        CreateMap<CreateCommentDto, Comment>();
+        CreateMap<CommentLikeDto, CommentLike>().ReverseMap();
         
         CreateMap<User, UserDto>().ReverseMap();
         CreateMap<CreateUserDto, User>().ReverseMap();

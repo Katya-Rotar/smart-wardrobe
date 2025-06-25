@@ -17,6 +17,8 @@ public interface IUnitOfWork : IDisposable
     IFollowerRepository Followers { get; }
     ISavedPostRepository SavedPosts { get; }
     IPostLikeRepository PostLikes { get; }
+    ICommentRepository Comments { get; }
+    ICommentLikeRepository CommentLikes { get; }
     Task SaveAsync();
     Task BeginTransactionAsync(CancellationToken cancellationToken);
     Task CommitTransactionAsync(CancellationToken cancellationToken);

@@ -24,13 +24,16 @@ public class UnitOfWork : IUnitOfWork
     public IFollowerRepository Followers { get; }
     public ISavedPostRepository SavedPosts { get; }
     public IPostLikeRepository PostLikes { get; }
+    public ICommentRepository Comments { get; }
+    public ICommentLikeRepository CommentLikes { get; }
 
     public UnitOfWork(WardrobeDbContext context,
         IClothingItemRepository clothingItem, ICategoryRepository categories, ITypeRepository types, 
         ITemperatureSuitabilityRepository temperatureSuitability, IStyleRepository styles,
         ISeasonRepository seasons, ITagRepository tags, IOutfitRepository outfits, IOutfitGroupRepository outfitGroups,
         IUserRepository users, IPublicationRepository publications, IPublicationTagRepository publicationTags,
-        IFollowerRepository followers, ISavedPostRepository savedPosts, IPostLikeRepository postLikes)
+        IFollowerRepository followers, ISavedPostRepository savedPosts, IPostLikeRepository postLikes,
+        ICommentRepository comments, ICommentLikeRepository commentLikes)
     {
         _context = context;
         ClothingItems = clothingItem;
@@ -48,6 +51,8 @@ public class UnitOfWork : IUnitOfWork
         Followers = followers;
         SavedPosts = savedPosts;
         PostLikes = postLikes;
+        Comments = comments;
+        CommentLikes = commentLikes;
     }
 
     public void Dispose()
