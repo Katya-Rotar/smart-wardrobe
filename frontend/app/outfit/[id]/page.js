@@ -4,6 +4,7 @@ import ItemCard from "../../components/wardrobe/itemCard";
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import api from '../../../api/api';
+import CreatePublicationModal from '../../components/createPublicationModal'
 
 const OutfitDetailsPage = () => {
     const { id } = useParams();
@@ -12,7 +13,24 @@ const OutfitDetailsPage = () => {
     const [outfit, setOutfit] = useState(null);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
+    const handleOpenModal = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
+
+    const handlePublish = async (dto) => {
+        try {
+            const response = await api.post('/publication', dto);
+            const id = response.data.id;
+            router.push(`/publication/${id}`);
+        } catch (error) {
+            console.error('Failed to publish:', error);
+            alert('Failed to publish.');
+        } finally {
+            handleCloseModal();
+        }
+    };
+    
     useEffect(() => {
         async function fetchOutfit() {
             setLoading(true);
@@ -82,6 +100,17 @@ const OutfitDetailsPage = () => {
                     />
                 ))}
             </div>
+            <button onClick={handleOpenModal} style={{ marginLeft: '10px' }}>
+                Create Publication
+            </button>
+            {showModal && (
+                <CreatePublicationModal
+                    outfitId={outfit.id}
+                    tags={outfit.tags}
+                    onClose={handleCloseModal}
+                    onPublish={handlePublish}
+                />
+            )}
         </div>
     );
 };

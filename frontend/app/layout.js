@@ -26,6 +26,7 @@ export default function RootLayout({ children }) {
           <div className="grid-children">
             {children}
           </div>
+          <div id="modal-root"></div>
         </div>
       </body>
     </html>

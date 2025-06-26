@@ -1,0 +1,34 @@
+﻿.publication-grid {
+    column-count: 4;
+    column-gap: 16px;
+    padding: 20px;
+}
+
+@media (max-width: 1200px) {
+    .publication-grid {
+        column-count: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .publication-grid {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 500px) {
+    .publication-grid {
+        column-count: 1;
+    }
+}
+
+.publication-card {
+    margin-bottom: 16px;
+}
+
+.loading-text {
+    text-align: center;
+    margin: 16px;
+    font-weight: bold;
+    color: #666;
+}
