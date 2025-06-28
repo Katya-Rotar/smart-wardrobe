@@ -11,12 +11,32 @@ export default function AllPublicationsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
+  const [filter, setFilter] = useState('all');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const observer = useRef();
+  
+  const getValidToken = () => {
+    const token = localStorage.getItem('token');
+    return token && token !== 'undefined' && token.trim() !== '' ? token : null;
+  };
+  
+  useEffect(() => {
+    const token = getValidToken();
+    setIsAuthenticated(!!token);
+  }, []);
+  
+  useEffect(() => {
+    setPageNumber(1);
+    setPublications([]);
+  }, [filter]);
 
+  useEffect(() => {
+    fetchPublications(pageNumber, filter);
+  }, [pageNumber, filter]);
+  
   const lastPublicationRef = useCallback((node) => {
     if (loading) return;
-
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver(entries => {
@@ -28,18 +48,21 @@ export default function AllPublicationsPage() {
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
 
-  useEffect(() => {
-    fetchPublications(pageNumber);
-  }, [pageNumber]);
-
-  const fetchPublications = async (page) => {
+  const fetchPublications = async (page, filterType) => {
     setLoading(true);
     try {
-      const res = await api.get('/publication', {
-        params: {
-          pageNumber: page,
-          pageSize: 12
-        }
+      const token = getValidToken();
+      let endpoint = '/publication';
+      const headers = {};
+
+      if (filterType === 'subscriptions' && token) {
+        endpoint = '/publication/followings';
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      const res = await api.get(endpoint, {
+        params: { pageNumber: page, pageSize: 12 },
+        headers
       });
 
       const data = res.data;
@@ -61,6 +84,23 @@ export default function AllPublicationsPage() {
 
   return (
       <>
+        {isAuthenticated && (
+            <div className="publication-filter-buttons">
+              <button
+                  onClick={() => setFilter('all')}
+                  className={filter === 'all' ? 'active-filter' : ''}
+              >
+                All
+              </button>
+              <button
+                  onClick={() => setFilter('subscriptions')}
+                  className={filter === 'subscriptions' ? 'active-filter' : ''}
+              >
+                Subscriptions
+              </button>
+            </div>
+        )}
+
         <div className="publication-grid">
           {publications.map((pub, index) => {
             const card = (

@@ -32,3 +32,26 @@
     font-weight: bold;
     color: #666;
 }
+
+.publication-filter-buttons {
+    display: flex;
+    justify-content: left;
+    gap: 11px;
+    margin-left: 16px;
+    color: #5E5E5E;
+}
+
+.publication-filter-buttons button {
+    all: unset;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.publication-filter-buttons .active-filter {
+    color: black;
+    border: none;
+}
