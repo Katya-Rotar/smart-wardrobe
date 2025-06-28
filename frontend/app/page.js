@@ -3,12 +3,14 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import api from '../api/api';
 import './publicationsPage.css';
 import PublicationCard from './components/publicationCard';
+import PublicationModal from './components/publication/publicationModal';
 
 export default function AllPublicationsPage() {
   const [publications, setPublications] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [selectedPublicationId, setSelectedPublicationId] = useState(null);
 
   const observer = useRef();
 
@@ -43,7 +45,12 @@ export default function AllPublicationsPage() {
       const data = res.data;
       const newItems = data.items || data;
 
-      setPublications(prev => [...prev, ...newItems]);
+      setPublications(prev => {
+        const ids = new Set(prev.map(pub => pub.id));
+        const filteredNewItems = newItems.filter(pub => !ids.has(pub.id));
+        return [...prev, ...filteredNewItems];
+      });
+
       setHasMore(newItems.length > 0);
     } catch (err) {
       console.error('Error loading publications:', err);
@@ -53,20 +60,30 @@ export default function AllPublicationsPage() {
   };
 
   return (
-      <div className="publication-grid">
-        {publications.map((pub, index) => {
-          if (index === publications.length - 1) {
-            return (
-                <div ref={lastPublicationRef} key={pub.id}>
-                  <PublicationCard imageURL={pub.imageURL} tags={pub.tags} />
-                </div>
+      <>
+        <div className="publication-grid">
+          {publications.map((pub, index) => {
+            const card = (
+                <PublicationCard
+                    key={pub.id}
+                    imageURL={pub.imageURL}
+                    tags={pub.tags}
+                    onClick={() => setSelectedPublicationId(pub.id)}
+                />
             );
-          } else {
-            return (
-                <PublicationCard key={pub.id} imageURL={pub.imageURL} tags={pub.tags} />
-            );
-          }
-        })}
-      </div>
+
+            return index === publications.length - 1
+                ? <div ref={lastPublicationRef} key={pub.id}>{card}</div>
+                : card;
+          })}
+        </div>
+
+        {selectedPublicationId && (
+            <PublicationModal
+                publicationId={selectedPublicationId}
+                onClose={() => setSelectedPublicationId(null)}
+            />
+        )}
+      </>
   );
 }
