@@ -60,11 +60,21 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdatePublicationDto dto,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdatePublicationDto dto, CancellationToken cancellationToken)
         {
             if (id != dto.Id)
                 return BadRequest("Mismatched ID");
+
+            var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken == null || !int.TryParse(userIdFromToken, out var userId))
+                return Unauthorized("Invalid token.");
+
+            var publication = await _publicationService.GetPublicationDetailsAsync(id);
+            if (publication == null)
+                return NotFound("Publication not found.");
+
+            if (publication.UserID != userId)
+                return Forbid("You are not allowed to update this publication.");
 
             await _publicationService.UpdatePublicationAsync(id, dto, cancellationToken);
             return NoContent();
@@ -74,6 +84,17 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
+            var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken == null || !int.TryParse(userIdFromToken, out var userId))
+                return Unauthorized("Invalid token.");
+
+            var publication = await _publicationService.GetPublicationDetailsAsync(id);
+            if (publication == null)
+                return NotFound("Publication not found.");
+
+            if (publication.UserID != userId)
+                return Forbid("You are not allowed to delete this publication.");
+
             await _publicationService.DeletePublicationAsync(id, cancellationToken);
             return NoContent();
         }

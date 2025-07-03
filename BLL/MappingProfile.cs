@@ -79,6 +79,7 @@ public class MappingProfile : Profile
         CreateMap<Publication, PublicationDetailsDto>()
             .ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.ImageURL))
             .ForMember(dest => dest.CommentingOptions, opt => opt.MapFrom(src => src.CommentingOptions))
+            .ForMember(dest => dest.UserID, opt => opt.MapFrom(src => src.User.Id))
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
             .ForMember(dest => dest.UserImage, opt => opt.MapFrom(src => src.User.ProfileImage))
             .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.PublicationTags.Select(pt => pt.Tag.TagName)))

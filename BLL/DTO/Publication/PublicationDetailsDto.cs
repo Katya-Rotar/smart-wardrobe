@@ -7,7 +7,7 @@ public class PublicationDetailsDto
     public int Id { get; set; }
     public string ImageURL { get; set; }
     public bool CommentingOptions { get; set; }
-
+    public int UserID { get; set; }
     public string Username { get; set; }
     public string? UserImage { get; set; }
 
