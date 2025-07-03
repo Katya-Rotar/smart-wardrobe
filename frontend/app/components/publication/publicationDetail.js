@@ -3,7 +3,7 @@ import LikeButton from './LikeButton';
 import CommentSection from './CommentSection';
 import OutfitItemsList from './OutfitItemsList';
 import SavePostButton from './SavePostButton';
-
+import Link from 'next/link';
 
 export default function PublicationDetail({ publication }) {
     return (
@@ -22,8 +22,11 @@ export default function PublicationDetail({ publication }) {
                 </p>
                 <div className="user-info">
                     <img src={publication.userImage || '/default-avatar.png'} alt="user" />
-                    <span>{publication.username}</span>
+                    <Link href={`/profile/${publication.userID}`}>
+                        <span style={{ cursor: 'pointer', textDecoration: 'underline' }}>{publication.username}</span>
+                    </Link>
                 </div>
+
                 {publication.commentingOptions && (
                     <CommentSection publicationId={publication.id} />
                 )}
