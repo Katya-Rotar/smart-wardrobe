@@ -1,0 +1,132 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Chelsea Market', cursive;
+  align-items: center;
+  height: 100vh;
+  background-color: #fff;
+  background-image: radial-gradient(circle, #666666 2px, transparent 3px);
+  background-size: 24px 24px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(21, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 18px;
+  padding: 9px;
+  height: 100vh;
+}
+
+.grid-header {
+  grid-column: 1 / 2;
+  grid-row: 4 / span 3;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+}
+
+.grid-userProfile {
+  grid-column: 17 / 22;
+  grid-row: 1 / 2;
+  justify-self: end;
+  position: fixed;
+  top: 9px;
+  z-index: 10
+}
+
+.grid-calendarWeather {
+  grid-column: 17 / 22;
+  grid-row: 2 / 10;
+  justify-self: end;
+  position: fixed;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding-right: 5px;
+  z-index: 5; 
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.grid-calendarWeather::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.grid-calendarWeather .customCalendar {
+  flex: 1;
+  min-height: 280px;
+}
+
+.grid-calendarWeather .weatherWidget {
+  flex: 1;
+  min-height: 180px;
+}
+
+.grid-searchBar {
+  grid-column: 2 / 16;
+  grid-row: 1 / 2;
+  justify-self: left;
+  position: fixed;
+  left: 54px;
+  top: 9px;
+}
+
+.grid-children {
+  grid-column: 2 / 17;
+  grid-row: 2 / 11;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  z-index: 0;
+}
+
+.grid-children::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+@media (max-width: 1300px) {
+  .grid-children {
+    grid-column: 2 / 16;
+  }
+}
+
+@media (max-width: 1100px) {
+  .grid-children {
+    grid-column: 3 / 15;
+  }
+}
+
+@media (max-width: 950px) {
+  .grid-children {
+    grid-column: 3 / 14;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-children {
+    grid-column: 3 / 20;
+  }
+}
+
+@media (max-width: 500px) {
+  .grid-children {
+    grid-column: 4 / 20;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-searchBar {
+    left: 8px;
+  }
+}

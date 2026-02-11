@@ -1,0 +1,31 @@
+.sidebar {
+   display: flex;
+   background-color: #161717;
+   border-radius: 20px;
+   flex-direction: column;
+   width: 55px;
+   padding: 0;
+}
+
+.link {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   width: 55px;
+   height: 55px;
+   border-radius: 20px;
+   transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.link:hover {
+   background: #333;
+}
+
+.active {
+   background: #375885;
+   transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.activeSvg {
+   filter: brightness(0) saturate(100%) invert(100%);
+ }

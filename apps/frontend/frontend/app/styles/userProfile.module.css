@@ -1,0 +1,129 @@
+.user-profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #161717;
+  color: white;
+  padding: 4px;
+  border-radius: 20px;
+  justify-content: space-between;
+  width: auto;
+  height: 46px;
+  font-family: 'Chelsea Market', cursive;
+}
+
+.login-button {
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Кнопки (дзвіночок та стрілка) */
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Інформація про користувача */
+.user-info {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  margin-left: 10px;
+  z-index: 2;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.text-info {
+  margin-left: 10px;
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 3px;
+  margin-top: 0;
+}
+
+.email {
+  font-size: 12px;
+  color: #5E5E5E;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* Випадаюче меню */
+.dropdown {
+  position: absolute;
+  color: white;
+  z-index: 1;
+}
+
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+}
+
+.dropdown ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.dropdown ul li:hover {
+  background: #333;
+  border-radius: 15px;
+}
+
+.menu-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.notifications {
+  right: 0;
+  padding: 2px;
+  width: 306px;
+  top: 58px;
+}
+
+.profile {
+  right: 0;
+  padding: 10px;
+  border-radius: 0px 0px 20px 20px;
+  width: 110px;
+  background: #161717;
+  top: 36px;
+}
+
+@media (max-width: 768px) {
+  .text-info {
+    display: none;
+  }
+}

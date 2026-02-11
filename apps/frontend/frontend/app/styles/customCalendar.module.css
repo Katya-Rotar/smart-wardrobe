@@ -1,0 +1,74 @@
+.calendarContainer {
+   width: 270px;
+   background-color: #628ECB;
+   border-radius: 20px;
+   padding: 12px;
+   color: #fff;
+ }
+ 
+ .header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 10px;
+ }
+ 
+ .header h2 {
+   font-size: 20px;
+   font-weight: bold;
+   margin: 0;
+ }
+ 
+ .iconButton {
+   background: none;
+   border: none;
+   cursor: pointer;
+ }
+ 
+ .controls {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 8px;
+ }
+ 
+ .dateButton {
+   display: flex;
+   align-items: center;
+   gap: 5px;
+   background: none;
+   color: #fff;
+   border: 1px solid #375885;
+   border-radius: 8px;
+   padding: 8px 10px;
+   font-size: 12px;
+ }
+ 
+ .viewLink {
+   color: #fff;
+   text-decoration: underline;
+   font-size: 14px;
+   cursor: pointer;
+   padding-right: 10px;
+ }
+ 
+ .customCalendar {
+   border: none;
+   background: none;
+ }
+  
+ .calendarContainer.compact {
+  width: 30px;
+  height: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 21px;
+  background-color: #628ECB;
+}
+
+.compact{
+  justify-content: center;
+  margin-bottom: 0;
+  display: none;
+}

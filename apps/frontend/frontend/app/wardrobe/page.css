@@ -1,0 +1,13 @@
+.add-button {
+  display: inline-block;
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  background-color: #161717; /* темний фон, як у category-title */
+  padding: 8px 18px;
+  border-radius: 20%;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  cursor: pointer;
+}

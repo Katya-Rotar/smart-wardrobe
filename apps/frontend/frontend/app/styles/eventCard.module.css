@@ -1,0 +1,53 @@
+.card {
+   background: #161717;
+   font-family: 'Chelsea Market', cursive;
+   color: white;
+   border-radius: 15px;
+   padding: 5px;
+   width: 300px;
+   margin-bottom: 5px;
+ }
+ 
+ .header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin: 0px;
+ }
+ 
+ .indicator {
+   width: 10px;
+   height: 10px;
+   background: #375885;
+   border-radius: 50%;
+   margin-right: 5px;
+ }
+ 
+ .title {
+   font-size: 14px;
+   font-weight: bold;
+   flex-grow: 1;
+   margin: 0px;
+ }
+ 
+ .time {
+   font-size: 12px;
+ }
+ 
+ .details {
+   margin-top: 2px;
+   font-size: 12px;
+   line-height: 1.2; /* Додає менший міжрядковий інтервал */
+ }
+ 
+ .details p {
+   margin: 2px 0; /* Встановлює вертикальні відступи між абзацами */
+ }
+ 
+ .bold {
+   font-weight: bold;
+ }
+ 
+ .light {
+   color: #838088;
+ }

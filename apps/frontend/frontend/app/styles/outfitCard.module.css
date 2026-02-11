@@ -1,0 +1,25 @@
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px;
+  background-color: #f9f9f9;
+  width: 300px;
+}
+
+.items {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.item {
+  text-align: center;
+}
+
+.item img {
+  width: 80px;
+  height: auto;
+  border-radius: 6px;
+}

@@ -1,0 +1,167 @@
+.container {
+  background-color: #375885;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  gap: 50px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.uploaded-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.photo-box {
+  width: 250px;
+  height: 250px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.add-photo-btn {
+  background: none;
+  border: none;
+  color: black;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon {
+  font-size: 36px;
+}
+
+.black-btn {
+  background: black;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/* Form Section */
+.form-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+input, select {
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  width: 100%;
+  color: black;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.row input {
+  flex: 1;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.white-btn {
+  background: white;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.white-btn:hover {
+  background: #ddd;
+}
+
+.btn-group-large {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.white-btn.active {
+  background-color: #161717; /* яскравий синій фон */
+  color: white;
+  border-color: #161717;
+}
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .photo-box {
+    width: 200px;
+    height: 200px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .photo-box {
+    width: 160px;
+    height: 160px;
+  }
+
+  .black-btn, .white-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn-group-large {
+    grid-template-columns: 1fr;
+  }
+}
