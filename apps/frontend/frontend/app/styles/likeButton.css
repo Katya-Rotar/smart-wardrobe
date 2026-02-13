@@ -1,0 +1,25 @@
+﻿.like-button-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    font-family: 'Chelsea Market', cursive;
+}
+
+.like-button-icon .heart {
+    font-size: 20px;
+}
+
+.like-button-icon.liked .heart {
+    color: red;
+}
+
+
+.like-button-icon:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

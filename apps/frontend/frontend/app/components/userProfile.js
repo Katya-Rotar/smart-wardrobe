@@ -96,7 +96,11 @@ export default function UserProfile() {
                 <img src="/notifications.svg" alt="Notifications" className={styles.icon} />
             </button>
 
-            <div className={styles['user-info']}>
+            <div
+                className={styles['user-info']}
+                onClick={() => router.push(`/profile/${user.id}`)}
+                style={{ cursor: 'pointer' }}
+            >
                 <img
                     src={user.profileImage ? user.profileImage : "/Image.png"}
                     alt={user.username}
