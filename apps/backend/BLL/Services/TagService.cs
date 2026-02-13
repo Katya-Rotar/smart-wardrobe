@@ -36,15 +36,12 @@ public class TagService : ITagService
         {
             return existingTag.Id;
         }
-
-        await _unitOfWork.BeginTransactionAsync(cancellationToken);
+        
         try
         {
             var tag = _mapper.Map<Tag>(tagDto);
-
             await _unitOfWork.Tags.AddAsync(tag);
             await _unitOfWork.SaveAsync();
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return tag.Id;
         }
@@ -53,5 +50,11 @@ public class TagService : ITagService
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             throw;
         }
+    }
+    
+    public async Task<List<TagDto>> SearchTagsAsync(string query)
+    {
+        var tags = await _unitOfWork.Tags.SearchTagsByNameAsync(query);
+        return _mapper.Map<List<TagDto>>(tags);
     }
 }

@@ -10,9 +10,9 @@ namespace DAL.Context.Configuration
         {
             builder.HasKey(cl => cl.Id);
             
-            builder.HasOne(cl => cl.Profile)
+            builder.HasOne(cl => cl.User)
                 .WithMany(p => p.CommentLikes)
-                .HasForeignKey(cl => cl.ProfileID)
+                .HasForeignKey(cl => cl.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Configure the relationship with Comment

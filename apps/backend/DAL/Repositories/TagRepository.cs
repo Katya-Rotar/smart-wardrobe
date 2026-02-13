@@ -16,4 +16,13 @@ public class TagRepository : GenericRepository<Tag>, ITagRepository
     {
         return await context.Set<Tag>().FirstOrDefaultAsync(t => t.TagName== name);
     }
+    
+    public async Task<List<Tag>> SearchTagsByNameAsync(string query)
+    {
+        return await context.Set<Tag>()
+            .Where(t => t.TagName.ToLower().Contains(query.ToLower()))
+            .OrderBy(t => t.TagName)
+            .Take(10)
+            .ToListAsync();
+    }
 }

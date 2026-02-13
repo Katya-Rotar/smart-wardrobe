@@ -81,6 +81,13 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IOutfitRepository, OutfitRepository>();
 builder.Services.AddScoped<IOutfitGroupRepository, OutfitGroupRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPublicationRepository, PublicationRepository>();
+builder.Services.AddScoped<IPublicationTagRepository, PublicationTagRepository>();
+builder.Services.AddScoped<IFollowerRepository, FollowerRepository>();
+builder.Services.AddScoped<ISavedPostRepository, SavedPostRepository>();
+builder.Services.AddScoped<IPostLikeRepository, PostLikeRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
 
 // Services
 builder.Services.AddScoped<IClothingItemService, ClothingItemService>();
@@ -93,6 +100,12 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IOutfitService, OutfitService>();
 builder.Services.AddScoped<IOutfitGroupService, OutfitGroupService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPublicationService, PublicationService>();
+builder.Services.AddScoped<IFollowerService, FollowerService>();
+builder.Services.AddScoped<ISavedPostService, SavedPostService>();
+builder.Services.AddScoped<IPostLikeService, PostLikeService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ICommentLikeService, CommentLikeService>();
 
 builder.Services.AddCors(options =>
 {

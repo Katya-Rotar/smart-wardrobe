@@ -17,9 +17,9 @@ namespace DAL.Context.Configuration
             builder.Property(p => p.CommentingOptions)
                 .IsRequired();
             
-            builder.HasOne(p => p.Profile)
+            builder.HasOne(p => p.User)
                 .WithMany(pr => pr.Publications)
-                .HasForeignKey(p => p.ProfileID)
+                .HasForeignKey(p => p.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
             
             builder.HasOne(p => p.Outfit)

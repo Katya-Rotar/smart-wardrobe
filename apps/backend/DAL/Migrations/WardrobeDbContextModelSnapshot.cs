@@ -317,22 +317,22 @@ namespace DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<int>("ProfileID")
-                        .HasColumnType("integer")
-                        .HasColumnName("profile_id");
-
                     b.Property<int>("PublicationID")
                         .HasColumnType("integer")
                         .HasColumnName("publication_id");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_comments");
 
-                    b.HasIndex("ProfileID")
-                        .HasDatabaseName("ix_comments_profile_id");
-
                     b.HasIndex("PublicationID")
                         .HasDatabaseName("ix_comments_publication_id");
+
+                    b.HasIndex("UserID")
+                        .HasDatabaseName("ix_comments_user_id");
 
                     b.ToTable("comments", (string)null);
 
@@ -342,16 +342,16 @@ namespace DAL.Migrations
                             Id = 1,
                             Content = "Great outfit!",
                             CreatedAt = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ProfileID = 1,
-                            PublicationID = 1
+                            PublicationID = 1,
+                            UserID = 1
                         },
                         new
                         {
                             Id = 2,
                             Content = "Where did you get those shoes?",
                             CreatedAt = new DateTime(2025, 5, 7, 0, 0, 0, 0, DateTimeKind.Utc),
-                            ProfileID = 2,
-                            PublicationID = 1
+                            PublicationID = 1,
+                            UserID = 2
                         });
                 });
 
@@ -368,9 +368,9 @@ namespace DAL.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("comment_id");
 
-                    b.Property<int>("ProfileID")
+                    b.Property<int>("UserID")
                         .HasColumnType("integer")
-                        .HasColumnName("profile_id");
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("pk_comment_likes");
@@ -378,8 +378,8 @@ namespace DAL.Migrations
                     b.HasIndex("CommentID")
                         .HasDatabaseName("ix_comment_likes_comment_id");
 
-                    b.HasIndex("ProfileID")
-                        .HasDatabaseName("ix_comment_likes_profile_id");
+                    b.HasIndex("UserID")
+                        .HasDatabaseName("ix_comment_likes_user_id");
 
                     b.ToTable("comment_likes", (string)null);
 
@@ -388,13 +388,13 @@ namespace DAL.Migrations
                         {
                             Id = 1,
                             CommentID = 1,
-                            ProfileID = 2
+                            UserID = 2
                         },
                         new
                         {
                             Id = 3,
                             CommentID = 2,
-                            ProfileID = 1
+                            UserID = 1
                         });
                 });
 
@@ -910,22 +910,22 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ProfileID")
-                        .HasColumnType("integer")
-                        .HasColumnName("profile_id");
-
                     b.Property<int>("PublicationID")
                         .HasColumnType("integer")
                         .HasColumnName("publication_id");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_post_likes");
 
-                    b.HasIndex("ProfileID")
-                        .HasDatabaseName("ix_post_likes_profile_id");
-
                     b.HasIndex("PublicationID")
                         .HasDatabaseName("ix_post_likes_publication_id");
+
+                    b.HasIndex("UserID")
+                        .HasDatabaseName("ix_post_likes_user_id");
 
                     b.ToTable("post_likes", (string)null);
 
@@ -933,71 +933,14 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ProfileID = 1,
-                            PublicationID = 1
+                            PublicationID = 1,
+                            UserID = 1
                         },
                         new
                         {
                             Id = 2,
-                            ProfileID = 2,
-                            PublicationID = 1
-                        });
-                });
-
-            modelBuilder.Entity("DAL.Entities.Profile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Bio")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("bio");
-
-                    b.Property<string>("ProfileImage")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("profile_image");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("username");
-
-                    b.HasKey("Id")
-                        .HasName("pk_profiles");
-
-                    b.HasIndex("UserID")
-                        .IsUnique()
-                        .HasDatabaseName("ix_profiles_user_id");
-
-                    b.ToTable("profiles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Bio = "Lover of vintage style and cozy sweaters.",
-                            ProfileImage = "https://i.pinimg.com/564x/39/33/f6/3933f64de1724bb67264818810e3f2cb.jpg",
-                            UserID = 1,
-                            Username = "fashionlover123"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Bio = "Streetwear is my passion.",
-                            ProfileImage = "https://cdn.expertphotography.com/wp-content/uploads/2020/08/social-media-profile-photos.jpg",
-                            UserID = 2,
-                            Username = "Anna"
+                            PublicationID = 1,
+                            UserID = 2
                         });
                 });
 
@@ -1024,9 +967,9 @@ namespace DAL.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("outfit_id");
 
-                    b.Property<int>("ProfileID")
+                    b.Property<int>("UserID")
                         .HasColumnType("integer")
-                        .HasColumnName("profile_id");
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("pk_publications");
@@ -1034,8 +977,8 @@ namespace DAL.Migrations
                     b.HasIndex("OutfitID")
                         .HasDatabaseName("ix_publications_outfit_id");
 
-                    b.HasIndex("ProfileID")
-                        .HasDatabaseName("ix_publications_profile_id");
+                    b.HasIndex("UserID")
+                        .HasDatabaseName("ix_publications_user_id");
 
                     b.ToTable("publications", (string)null);
 
@@ -1046,7 +989,7 @@ namespace DAL.Migrations
                             CommentingOptions = true,
                             ImageURL = "https://fashionjackson.com/wp-content/uploads/2017/06/Fashion-Jackson-Everlane-White-Tshirt-Zara-Ripped-Black-Skinny-Jeans.jpg",
                             OutfitID = 1,
-                            ProfileID = 1
+                            UserID = 1
                         });
                 });
 
@@ -1102,22 +1045,22 @@ namespace DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ProfileID")
-                        .HasColumnType("integer")
-                        .HasColumnName("profile_id");
-
                     b.Property<int>("PublicationID")
                         .HasColumnType("integer")
                         .HasColumnName("publication_id");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_saved_posts");
 
-                    b.HasIndex("ProfileID")
-                        .HasDatabaseName("ix_saved_posts_profile_id");
-
                     b.HasIndex("PublicationID")
                         .HasDatabaseName("ix_saved_posts_publication_id");
+
+                    b.HasIndex("UserID")
+                        .HasDatabaseName("ix_saved_posts_user_id");
 
                     b.ToTable("saved_posts", (string)null);
 
@@ -1125,8 +1068,8 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ProfileID = 1,
-                            PublicationID = 1
+                            PublicationID = 1,
+                            UserID = 1
                         });
                 });
 
@@ -1684,13 +1627,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Comment", b =>
                 {
-                    b.HasOne("DAL.Entities.Profile", "Profile")
-                        .WithMany("Comments")
-                        .HasForeignKey("ProfileID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_comments_profiles_profile_id");
-
                     b.HasOne("DAL.Entities.Publication", "Publication")
                         .WithMany("Comments")
                         .HasForeignKey("PublicationID")
@@ -1698,9 +1634,16 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_comments_publications_publication_id");
 
-                    b.Navigation("Profile");
+                    b.HasOne("DAL.Entities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_comments_users_user_id");
 
                     b.Navigation("Publication");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DAL.Entities.CommentLike", b =>
@@ -1712,16 +1655,16 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_comment_likes_comments_comment_id");
 
-                    b.HasOne("DAL.Entities.Profile", "Profile")
+                    b.HasOne("DAL.Entities.User", "User")
                         .WithMany("CommentLikes")
-                        .HasForeignKey("ProfileID")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_comment_likes_profiles_profile_id");
+                        .HasConstraintName("fk_comment_likes_users_user_id");
 
                     b.Navigation("Comment");
 
-                    b.Navigation("Profile");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DAL.Entities.Event", b =>
@@ -1746,19 +1689,19 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Follower", b =>
                 {
-                    b.HasOne("DAL.Entities.Profile", "FollowerProfile")
+                    b.HasOne("DAL.Entities.User", "FollowerProfile")
                         .WithMany("Followers")
                         .HasForeignKey("FollowerID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_followers_profiles_follower_id");
+                        .HasConstraintName("fk_followers_users_follower_id");
 
-                    b.HasOne("DAL.Entities.Profile", "FollowingProfile")
+                    b.HasOne("DAL.Entities.User", "FollowingProfile")
                         .WithMany("Following")
                         .HasForeignKey("FollowingID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_followers_profiles_following_id");
+                        .HasConstraintName("fk_followers_users_following_id");
 
                     b.Navigation("FollowerProfile");
 
@@ -1925,13 +1868,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.PostLike", b =>
                 {
-                    b.HasOne("DAL.Entities.Profile", "Profile")
-                        .WithMany("PostLikes")
-                        .HasForeignKey("ProfileID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_post_likes_profiles_profile_id");
-
                     b.HasOne("DAL.Entities.Publication", "Publication")
                         .WithMany("PostLikes")
                         .HasForeignKey("PublicationID")
@@ -1939,19 +1875,14 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_post_likes_publications_publication_id");
 
-                    b.Navigation("Profile");
-
-                    b.Navigation("Publication");
-                });
-
-            modelBuilder.Entity("DAL.Entities.Profile", b =>
-                {
                     b.HasOne("DAL.Entities.User", "User")
-                        .WithOne("Profile")
-                        .HasForeignKey("DAL.Entities.Profile", "UserID")
+                        .WithMany("PostLikes")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_profiles_users_user_id");
+                        .HasConstraintName("fk_post_likes_users_user_id");
+
+                    b.Navigation("Publication");
 
                     b.Navigation("User");
                 });
@@ -1965,16 +1896,16 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_publications_outfits_outfit_id");
 
-                    b.HasOne("DAL.Entities.Profile", "Profile")
+                    b.HasOne("DAL.Entities.User", "User")
                         .WithMany("Publications")
-                        .HasForeignKey("ProfileID")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_publications_profiles_profile_id");
+                        .HasConstraintName("fk_publications_users_user_id");
 
                     b.Navigation("Outfit");
 
-                    b.Navigation("Profile");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DAL.Entities.PublicationTag", b =>
@@ -2000,13 +1931,6 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.SavedPost", b =>
                 {
-                    b.HasOne("DAL.Entities.Profile", "Profile")
-                        .WithMany("SavedPosts")
-                        .HasForeignKey("ProfileID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_saved_posts_profiles_profile_id");
-
                     b.HasOne("DAL.Entities.Publication", "Publication")
                         .WithMany("SavedPosts")
                         .HasForeignKey("PublicationID")
@@ -2014,9 +1938,16 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_saved_posts_publications_publication_id");
 
-                    b.Navigation("Profile");
+                    b.HasOne("DAL.Entities.User", "User")
+                        .WithMany("SavedPosts")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_saved_posts_users_user_id");
 
                     b.Navigation("Publication");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DAL.Entities.TypeCategory", b =>
@@ -2088,23 +2019,6 @@ namespace DAL.Migrations
                     b.Navigation("OutfitGroups");
                 });
 
-            modelBuilder.Entity("DAL.Entities.Profile", b =>
-                {
-                    b.Navigation("CommentLikes");
-
-                    b.Navigation("Comments");
-
-                    b.Navigation("Followers");
-
-                    b.Navigation("Following");
-
-                    b.Navigation("PostLikes");
-
-                    b.Navigation("Publications");
-
-                    b.Navigation("SavedPosts");
-                });
-
             modelBuilder.Entity("DAL.Entities.Publication", b =>
                 {
                     b.Navigation("Comments");
@@ -2155,7 +2069,15 @@ namespace DAL.Migrations
                 {
                     b.Navigation("ClothingItems");
 
+                    b.Navigation("CommentLikes");
+
+                    b.Navigation("Comments");
+
                     b.Navigation("Events");
+
+                    b.Navigation("Followers");
+
+                    b.Navigation("Following");
 
                     b.Navigation("Notifications");
 
@@ -2163,8 +2085,11 @@ namespace DAL.Migrations
 
                     b.Navigation("Outfits");
 
-                    b.Navigation("Profile")
-                        .IsRequired();
+                    b.Navigation("PostLikes");
+
+                    b.Navigation("Publications");
+
+                    b.Navigation("SavedPosts");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,9 +10,9 @@ namespace DAL.Context.Configuration
         {
             builder.HasKey(sp => sp.Id);
 
-            builder.HasOne(sp => sp.Profile)
+            builder.HasOne(sp => sp.User)
                 .WithMany(p => p.SavedPosts)
-                .HasForeignKey(sp => sp.ProfileID)
+                .HasForeignKey(sp => sp.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(sp => sp.Publication)

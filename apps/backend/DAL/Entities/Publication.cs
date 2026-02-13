@@ -4,7 +4,7 @@ public class Publication
 {
     public int Id { get; set; }
     
-    public int ProfileID { get; set; }
+    public int UserID { get; set; }
 
     public int OutfitID { get; set; }
 
@@ -12,7 +12,7 @@ public class Publication
 
     public bool CommentingOptions { get; set; }
     
-    public Profile? Profile { get; set; }
+    public User? User { get; set; }
     public Outfit? Outfit { get; set; }
     
     public IEnumerable<SavedPost>? SavedPosts { get; set; } = new List<SavedPost>();

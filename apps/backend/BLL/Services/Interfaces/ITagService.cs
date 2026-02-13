@@ -7,4 +7,5 @@ public interface ITagService
     Task<IEnumerable<TagDto>> GetAll();
     Task<TagDto> GetTagByIdAsync(int id);
     Task<int> AddTagAsync(CreateTagDto tagDto, CancellationToken cancellationToken);
+    Task<List<TagDto>> SearchTagsAsync(string query);
 }

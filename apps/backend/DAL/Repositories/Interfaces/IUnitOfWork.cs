@@ -12,6 +12,13 @@ public interface IUnitOfWork : IDisposable
     IOutfitRepository Outfits { get; }
     IOutfitGroupRepository OutfitGroups { get; }
     IUserRepository Users { get; }
+    IPublicationRepository Publications { get; }
+    IPublicationTagRepository PublicationTags { get; }
+    IFollowerRepository Followers { get; }
+    ISavedPostRepository SavedPosts { get; }
+    IPostLikeRepository PostLikes { get; }
+    ICommentRepository Comments { get; }
+    ICommentLikeRepository CommentLikes { get; }
     Task SaveAsync();
     Task BeginTransactionAsync(CancellationToken cancellationToken);
     Task CommitTransactionAsync(CancellationToken cancellationToken);

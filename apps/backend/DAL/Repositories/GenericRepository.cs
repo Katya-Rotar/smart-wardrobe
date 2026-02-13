@@ -51,4 +51,13 @@ public class GenericRepository<T> : IGenericRepository<T>
                      ?? throw new KeyNotFoundException($"{nameof(T)} with ID {id} not found.");
         await Task.Run(() => context.Set<T>().Remove(entity));
     }
+    
+    public virtual async Task AddRangeAsync(IEnumerable<T> entities)
+    {
+        if (entities == null || !entities.Any())
+        {
+            throw new ArgumentNullException($"{nameof(entities)} collection cannot be null or empty.");
+        }
+        await context.Set<T>().AddRangeAsync(entities);
+    }
 }

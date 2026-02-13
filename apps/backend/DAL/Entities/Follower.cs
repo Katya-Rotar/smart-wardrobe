@@ -10,6 +10,6 @@ public class Follower
 
     public DateTime CreatedAt { get; set; }
     
-    public Profile? FollowerProfile { get; set; }
-    public Profile? FollowingProfile { get; set; }
+    public User? FollowerProfile { get; set; }
+    public User? FollowingProfile { get; set; }
 }

@@ -53,9 +53,39 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(e => e.UserID)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(u => u.Profile)
-            .WithOne(p => p.User)
-            .HasForeignKey<Profile>(p => p.UserID)
+        builder.HasMany(p => p.SavedPosts)
+            .WithOne(sp => sp.User)
+            .HasForeignKey(sp => sp.UserID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(p => p.Publications)
+            .WithOne(pub => pub.User)
+            .HasForeignKey(pub => pub.UserID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(p => p.PostLikes)
+            .WithOne(pl => pl.User)
+            .HasForeignKey(pl => pl.UserID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(p => p.CommentLikes)
+            .WithOne(cl => cl.User)
+            .HasForeignKey(cl => cl.UserID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(p => p.Comments)
+            .WithOne(c => c.User)
+            .HasForeignKey(c => c.UserID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(p => p.Followers)
+            .WithOne(f => f.FollowerProfile)
+            .HasForeignKey(f => f.FollowerID)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(p => p.Following)
+            .WithOne(f => f.FollowingProfile)
+            .HasForeignKey(f => f.FollowingID)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
