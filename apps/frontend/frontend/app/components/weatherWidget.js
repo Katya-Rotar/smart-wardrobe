@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import styles from '../styles/WeatherWidget.module.css';
+import styles from '../styles/weatherWidget.module.css';
 
 const WeatherWidget = () => {
   const [currentDate, setCurrentDate] = useState('');

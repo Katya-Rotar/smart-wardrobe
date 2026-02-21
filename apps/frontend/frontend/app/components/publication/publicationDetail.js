@@ -1,8 +1,8 @@
 ﻿import React from 'react';
-import LikeButton from './LikeButton';
-import CommentSection from './CommentSection';
-import OutfitItemsList from './OutfitItemsList';
-import SavePostButton from './SavePostButton';
+import LikeButton from './likeButton';
+import CommentSection from './commentSection';
+import OutfitItemsList from './outfitItemsList';
+import SavePostButton from './savePostButton';
 import Link from 'next/link';
 
 export default function PublicationDetail({ publication }) {

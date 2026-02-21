@@ -1,4 +1,6 @@
-﻿import { useState } from 'react';
+﻿"use client";
+
+import { useState } from 'react';
 
 export default function Register() {
     const [email, setEmail] = useState('');

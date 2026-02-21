@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import '../../styles/publicationModal.css';
-import PublicationDetail from './PublicationDetail';
+import PublicationDetail from './publicationDetail';
 import api from '../../../api/api';
 import PortalModal from '../../components/portalModal';
 

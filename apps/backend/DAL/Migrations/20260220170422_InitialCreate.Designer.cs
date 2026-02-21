@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(WardrobeDbContext))]
-    [Migration("20250616091604_RemovedProfileEntity")]
-    partial class RemovedProfileEntity
+    [Migration("20260220170422_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
