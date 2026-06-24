@@ -40,6 +40,60 @@ services:
       - smart-wardrobe.api
     networks:
       - smart-wardrobe-network
+  
+  smart-wardrobe.ml.vision:
+    build:
+      context: ../clothing-vision-service
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+    container_name: smart-wardrobe.ml.vision
+    ports:
+      - "8000:8000"
+    networks:
+      - smart-wardrobe-network
+    restart: always
+    
+  smart-wardrobe.ml.visual-search:
+    build:
+      context: ../ml-visual-search
+      dockerfile: Dockerfile
+    container_name: smart-wardrobe.ml.visual-search
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8003:8003"
+    volumes:
+      - ../ml-visual-search/models:/app/models
+    networks:
+      - smart-wardrobe-network
+    restart: always
+    
+  smart-wardrobe.ml.capsule:
+    build:
+      context: ../ml-capsule-generator
+      dockerfile: Dockerfile
+    container_name: smart-wardrobe.ml.capsule
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8001:8001"
+    networks:
+      - smart-wardrobe-network
+    restart: always
+    
+  smart-wardrobe.ml.recommendation:
+    build:
+      context: ../ml-smart-recommendation
+      dockerfile: Dockerfile
+    container_name: smart-wardrobe.ml.recommendation
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8002:8002"
+    networks:
+      - smart-wardrobe-network
+    restart: always
 
 networks:
   smart-wardrobe-network:
