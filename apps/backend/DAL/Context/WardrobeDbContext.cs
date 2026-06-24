@@ -39,6 +39,7 @@ public class WardrobeDbContext : DbContext
     public DbSet<CommentLike> CommentLikes { get; set; }
     public DbSet<Follower> Followers { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<ShopItem> ShopItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,5 +98,9 @@ public class WardrobeDbContext : DbContext
         modelBuilder.Entity<Type>().HasData(DataSeeder.GenerateTypes());
         modelBuilder.Entity<TypeCategory>().HasData(DataSeeder.GenerateTypeCategories());
         modelBuilder.Entity<User>().HasData(DataSeeder.GenerateUsers());
+        modelBuilder.Entity<ShopItem>(entity =>
+        {
+            entity.HasIndex(e => e.ArticleCode).IsUnique();
+        });
     }
 }

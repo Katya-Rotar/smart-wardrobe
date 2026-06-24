@@ -12,9 +12,9 @@ public abstract class DataSeeder
             new Category { Id = 1, CategoryName = "Outerwear"},
             new Category { Id = 2, CategoryName = "Tops"},
             new Category { Id = 3, CategoryName = "Bottoms"},
-            new Category { Id = 4, CategoryName = "Dresses"},
+            new Category { Id = 4, CategoryName = "Full_body"},
             new Category { Id = 5, CategoryName = "Shoes"},
-            new Category { Id = 6, CategoryName = "Accessories"}
+            new Category { Id = 6, CategoryName = "Sweaters_Hoodies"}
         ];
     }
     
@@ -27,21 +27,20 @@ public abstract class DataSeeder
                 Id = 1,
                 UserID = 1,
                 Name = "Blue Denim Jacket",
-                CategoryID = 1, // Outerwear
-                TypeID = 1,     // e.g., Jacket
+                CategoryID = 1, 
+                TypeID = 9,     // Jacket за новим ID
                 Color = "Blue",
                 TemperatureSuitabilityID = 4,
                 ImageURL = "https://e7.pngegg.com/pngimages/324/140/png-clipart-blue-washed-denim-button-up-jacket-jean-jacket-denim-h-m-jeans-women-s-jackets-blue-women-accessories-thumbnail.png",
                 LastWornDate = new DateTime(2025, 5, 6, 0, 0, 0, DateTimeKind.Utc)
-
             },
             new ClothingItem
             {
                 Id = 2,
                 UserID = 1,
                 Name = "White T-Shirt",
-                CategoryID = 2, // Tops
-                TypeID = 3,     // T-Shirt
+                CategoryID = 2, 
+                TypeID = 2,     // Tee за новим ID
                 Color = "White",
                 TemperatureSuitabilityID = 5,
                 ImageURL = "https://png.pngtree.com/png-clipart/20230930/original/pngtree-white-t-shirt-mockup-realistic-t-shirt-png-image_13020297.png",
@@ -52,8 +51,8 @@ public abstract class DataSeeder
                 Id = 3,
                 UserID = 1,
                 Name = "Black Jeans",
-                CategoryID = 3, // Bottoms
-                TypeID = 6,     // Jeans
+                CategoryID = 3, 
+                TypeID = 12,    // Jeans за новим ID
                 Color = "Black",
                 TemperatureSuitabilityID = 4,
                 ImageURL = "https://www.pngpacks.com/uploads/data/2058/IMG_bbgqbicsmHvp.png",
@@ -64,8 +63,8 @@ public abstract class DataSeeder
                 Id = 4,
                 UserID = 1,
                 Name = "Summer Dress",
-                CategoryID = 4, // Dresses
-                TypeID = 11,     // Dress
+                CategoryID = 4, 
+                TypeID = 1,     // Dress за новим ID
                 Color = "Yellow",
                 TemperatureSuitabilityID = 5,
                 ImageURL = "https://e7.pngegg.com/pngimages/826/743/png-clipart-cocktail-dress-skirt-gown-dirndl-summer-clothes-fashion-party-dress-thumbnail.png",
@@ -78,30 +77,10 @@ public abstract class DataSeeder
     {
         return
         [
-            new ClothingItemSeason
-            {
-                Id = 1,
-                ClothingItemID = 1, // Blue Denim Jacket
-                SeasonID = 4       // Winter
-            },
-            new ClothingItemSeason
-            {
-                Id = 2,
-                ClothingItemID = 2, // White T-Shirt
-                SeasonID = 2       // Summer
-            },
-            new ClothingItemSeason
-            {
-                Id = 3,
-                ClothingItemID = 3, // Black Jeans
-                SeasonID = 1       // Spring
-            },
-            new ClothingItemSeason
-            {
-                Id = 4,
-                ClothingItemID = 4, // Summer Dress
-                SeasonID = 2       // Summer
-            }
+            new ClothingItemSeason { Id = 1, ClothingItemID = 1, SeasonID = 4 },
+            new ClothingItemSeason { Id = 2, ClothingItemID = 2, SeasonID = 2 },
+            new ClothingItemSeason { Id = 3, ClothingItemID = 3, SeasonID = 1 },
+            new ClothingItemSeason { Id = 4, ClothingItemID = 4, SeasonID = 2 }
         ];
     }
 
@@ -109,30 +88,10 @@ public abstract class DataSeeder
     {
         return
         [
-            new ClothingItemStyle
-            {
-                Id = 1,
-                ClothingItemID = 1, // Blue Denim Jacket
-                StyleID = 1         // Casual
-            },
-            new ClothingItemStyle
-            {
-                Id = 2,
-                ClothingItemID = 2, // White T-Shirt
-                StyleID = 3         // Sporty
-            },
-            new ClothingItemStyle
-            {
-                Id = 3,
-                ClothingItemID = 3, // Black Jeans
-                StyleID = 2         // Formal
-            },
-            new ClothingItemStyle
-            {
-                Id = 4,
-                ClothingItemID = 4, // Summer Dress
-                StyleID = 1         // Casual
-            }
+            new ClothingItemStyle { Id = 1, ClothingItemID = 1, StyleID = 1 },
+            new ClothingItemStyle { Id = 2, ClothingItemID = 2, StyleID = 3 },
+            new ClothingItemStyle { Id = 3, ClothingItemID = 3, StyleID = 2 },
+            new ClothingItemStyle { Id = 4, ClothingItemID = 4, StyleID = 1 }
         ];
     }
 
@@ -263,8 +222,8 @@ public abstract class DataSeeder
     {
         return 
         [
-            new Outfit { Id = 1, UserID = 1, TemperatureSuitabilityID = 1},
-            new Outfit { Id = 2, UserID = 1, TemperatureSuitabilityID = 2}
+            new Outfit { Id = 1, UserID = 1, TemperatureSuitabilityID = 4},
+            new Outfit { Id = 2, UserID = 1, TemperatureSuitabilityID = 5}
         ];
     }
 
@@ -389,10 +348,10 @@ public abstract class DataSeeder
     {
         return
         [
-            new Season { Id = 1, SeasonName = "Spring" },
-            new Season { Id = 2, SeasonName = "Summer" },
-            new Season { Id = 3, SeasonName = "Autumn" },
-            new Season { Id = 4, SeasonName = "Winter" }
+            new Season { Id = 1, SeasonName = "Demi-season" },
+            new Season { Id = 2, SeasonName = "Summer" }, 
+            new Season { Id = 3, SeasonName = "All-season" },
+            new Season { Id = 4, SeasonName = "Winter" } 
         ];
     }
 
@@ -412,20 +371,38 @@ public abstract class DataSeeder
     {
         return
         [
-            new Type { Id = 1, TypeName = "Jacket" },
-            new Type { Id = 2, TypeName = "Coat" },
-            new Type { Id = 3, TypeName = "T-Shirt" },
-            new Type { Id = 4, TypeName = "Blouse" },
-            new Type { Id = 5, TypeName = "Sweatshirt" },
-            new Type { Id = 6, TypeName = "Jeans" },
-            new Type { Id = 7, TypeName = "Trousers" },
-            new Type { Id = 8, TypeName = "Shorts" },
-            new Type { Id = 9, TypeName = "Evening Dress" },
-            new Type { Id = 10, TypeName = "Casual Dress" },
-            new Type { Id = 11, TypeName = "Sundress" },
-            new Type { Id = 12, TypeName = "Sneakers" },
-            new Type { Id = 13, TypeName = "Boots" },
-            new Type { Id = 14, TypeName = "Heels" }
+            new Type { Id = 1, TypeName = "Dress" },
+            new Type { Id = 2, TypeName = "Tee" },
+            new Type { Id = 3, TypeName = "Blouse" },
+            new Type { Id = 4, TypeName = "Shorts" },
+            new Type { Id = 5, TypeName = "Tank" },
+            new Type { Id = 6, TypeName = "Skirt" },
+            new Type { Id = 7, TypeName = "Cardigan" },
+            new Type { Id = 8, TypeName = "Sweater" },
+            new Type { Id = 9, TypeName = "Jacket" },
+            new Type { Id = 10, TypeName = "Top" },
+            new Type { Id = 11, TypeName = "Blazer" },
+            new Type { Id = 12, TypeName = "Jeans" },
+            new Type { Id = 13, TypeName = "Jumpsuit" },
+            new Type { Id = 14, TypeName = "Leggings" },
+            new Type { Id = 15, TypeName = "Hoodie" },
+            new Type { Id = 16, TypeName = "Sweatpants" },
+            new Type { Id = 17, TypeName = "Coat" },
+            new Type { Id = 18, TypeName = "Parka" },
+            new Type { Id = 19, TypeName = "Jeggings" },
+            new Type { Id = 20, TypeName = "Chinos" },
+            new Type { Id = 21, TypeName = "Culottes" },
+            new Type { Id = 22, TypeName = "Flannel" },
+            new Type { Id = 23, TypeName = "Bomber" },
+            new Type { Id = 24, TypeName = "Anorak" },
+            new Type { Id = 25, TypeName = "Turtleneck" },
+            new Type { Id = 26, TypeName = "Peacoat" },
+            new Type { Id = 27, TypeName = "Sneakers" },
+            new Type { Id = 28, TypeName = "Boots" },
+            new Type { Id = 29, TypeName = "Heels" },
+            new Type { Id = 30, TypeName = "Flats" },
+            new Type { Id = 31, TypeName = "Sandals" },
+            new Type { Id = 32, TypeName = "Loafers" }
         ];
     }
 
@@ -433,32 +410,55 @@ public abstract class DataSeeder
     {
         return 
         [
-            new TypeCategory { Id = 1, CategoryID = 1, TypeID = 1},
-            new TypeCategory { Id = 2, CategoryID = 1, TypeID = 2},
-            new TypeCategory { Id = 3, CategoryID = 2, TypeID = 3},
-            new TypeCategory { Id = 4, CategoryID = 2, TypeID = 4},
-            new TypeCategory { Id = 5, CategoryID = 2, TypeID = 5},
-            new TypeCategory { Id = 6, CategoryID = 3, TypeID = 6},
-            new TypeCategory { Id = 7, CategoryID = 3, TypeID = 7},
-            new TypeCategory { Id = 8, CategoryID = 3, TypeID = 8},
-            new TypeCategory { Id = 9, CategoryID = 4, TypeID = 9},
-            new TypeCategory { Id = 10, CategoryID = 4, TypeID = 10},
-            new TypeCategory { Id = 11, CategoryID = 4, TypeID = 11},
-            new TypeCategory { Id = 12, CategoryID = 5, TypeID = 12},
-            new TypeCategory { Id = 13, CategoryID = 5, TypeID = 13},
-            new TypeCategory { Id = 14, CategoryID = 5, TypeID = 14},
+            new TypeCategory { Id = 1, CategoryID = 2, TypeID = 2 },  
+            new TypeCategory { Id = 2, CategoryID = 2, TypeID = 3 },  
+            new TypeCategory { Id = 3, CategoryID = 2, TypeID = 5 },  
+            new TypeCategory { Id = 4, CategoryID = 2, TypeID = 10 }, 
+            new TypeCategory { Id = 5, CategoryID = 2, TypeID = 22 }, 
+            new TypeCategory { Id = 6, CategoryID = 2, TypeID = 25 }, 
+
+            new TypeCategory { Id = 7, CategoryID = 6, TypeID = 8 },  
+            new TypeCategory { Id = 8, CategoryID = 6, TypeID = 7 },  
+            new TypeCategory { Id = 9, CategoryID = 6, TypeID = 15 }, 
+
+            new TypeCategory { Id = 10, CategoryID = 1, TypeID = 9 },  
+            new TypeCategory { Id = 11, CategoryID = 1, TypeID = 11 }, 
+            new TypeCategory { Id = 12, CategoryID = 1, TypeID = 17 }, 
+            new TypeCategory { Id = 13, CategoryID = 1, TypeID = 18 }, 
+            new TypeCategory { Id = 14, CategoryID = 1, TypeID = 23 }, 
+            new TypeCategory { Id = 15, CategoryID = 1, TypeID = 24 }, 
+            new TypeCategory { Id = 16, CategoryID = 1, TypeID = 26 }, 
+
+            new TypeCategory { Id = 17, CategoryID = 3, TypeID = 4 },  
+            new TypeCategory { Id = 18, CategoryID = 3, TypeID = 6 },  
+            new TypeCategory { Id = 19, CategoryID = 3, TypeID = 12 }, 
+            new TypeCategory { Id = 20, CategoryID = 3, TypeID = 14 }, 
+            new TypeCategory { Id = 21, CategoryID = 3, TypeID = 16 }, 
+            new TypeCategory { Id = 22, CategoryID = 3, TypeID = 19 }, 
+            new TypeCategory { Id = 23, CategoryID = 3, TypeID = 20 }, 
+            new TypeCategory { Id = 24, CategoryID = 3, TypeID = 21 }, 
+            
+            new TypeCategory { Id = 27, CategoryID = 5, TypeID = 27 }, 
+            new TypeCategory { Id = 28, CategoryID = 5, TypeID = 28 }, 
+            new TypeCategory { Id = 29, CategoryID = 5, TypeID = 29 }, 
+            new TypeCategory { Id = 30, CategoryID = 5, TypeID = 30 }, 
+            new TypeCategory { Id = 31, CategoryID = 5, TypeID = 31 }, 
+            new TypeCategory { Id = 32, CategoryID = 5, TypeID = 32 },
+
+            new TypeCategory { Id = 25, CategoryID = 4, TypeID = 1 },  
+            new TypeCategory { Id = 26, CategoryID = 4, TypeID = 13 }  
         ];
     }
 
     public static IReadOnlyCollection<TemperatureSuitability> GenerateTemperatureSuitabilities()
     {
         return [
-            new TemperatureSuitability {Id = 1, TemperatureSuitabilityName = "Extra could (-30 to -20)"},
+            new TemperatureSuitability {Id = 1, TemperatureSuitabilityName = "Extra cold (-30 to -20)"},
             new TemperatureSuitability {Id = 2, TemperatureSuitabilityName = "Very cold (-20 to -10)"},
             new TemperatureSuitability {Id = 3, TemperatureSuitabilityName = "Cold (-10 to 0)"},
             new TemperatureSuitability {Id = 4, TemperatureSuitabilityName = "Chilly (0 to +10)"},
             new TemperatureSuitability {Id = 5, TemperatureSuitabilityName = "Warm (+10 to +20)"},
-            new TemperatureSuitability {Id = 6, TemperatureSuitabilityName = "Hot (+20 to +30)"},
+            new TemperatureSuitability {Id = 6, TemperatureSuitabilityName = "Hot (+20 to +30)"}
         ];
     }
     

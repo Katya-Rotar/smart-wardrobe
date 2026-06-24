@@ -61,7 +61,7 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 4,
-                            CategoryName = "Dresses"
+                            CategoryName = "Full_body"
                         },
                         new
                         {
@@ -71,7 +71,7 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 6,
-                            CategoryName = "Accessories"
+                            CategoryName = "Sweaters_Hoodies"
                         });
                 });
 
@@ -148,7 +148,7 @@ namespace DAL.Migrations
                             LastWornDate = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Blue Denim Jacket",
                             TemperatureSuitabilityID = 4,
-                            TypeID = 1,
+                            TypeID = 9,
                             UserID = 1
                         },
                         new
@@ -160,7 +160,7 @@ namespace DAL.Migrations
                             LastWornDate = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "White T-Shirt",
                             TemperatureSuitabilityID = 5,
-                            TypeID = 3,
+                            TypeID = 2,
                             UserID = 1
                         },
                         new
@@ -172,7 +172,7 @@ namespace DAL.Migrations
                             LastWornDate = new DateTime(2025, 5, 11, 0, 0, 0, 0, DateTimeKind.Utc),
                             Name = "Black Jeans",
                             TemperatureSuitabilityID = 4,
-                            TypeID = 6,
+                            TypeID = 12,
                             UserID = 1
                         },
                         new
@@ -183,7 +183,7 @@ namespace DAL.Migrations
                             ImageURL = "https://e7.pngegg.com/pngimages/826/743/png-clipart-cocktail-dress-skirt-gown-dirndl-summer-clothes-fashion-party-dress-thumbnail.png",
                             Name = "Summer Dress",
                             TemperatureSuitabilityID = 5,
-                            TypeID = 11,
+                            TypeID = 1,
                             UserID = 1
                         });
                 });
@@ -616,13 +616,13 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            TemperatureSuitabilityID = 1,
+                            TemperatureSuitabilityID = 4,
                             UserID = 1
                         },
                         new
                         {
                             Id = 2,
-                            TemperatureSuitabilityID = 2,
+                            TemperatureSuitabilityID = 5,
                             UserID = 1
                         });
                 });
@@ -1097,7 +1097,7 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            SeasonName = "Spring"
+                            SeasonName = "Demi-season"
                         },
                         new
                         {
@@ -1107,13 +1107,62 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 3,
-                            SeasonName = "Autumn"
+                            SeasonName = "All-season"
                         },
                         new
                         {
                             Id = 4,
                             SeasonName = "Winter"
                         });
+                });
+
+            modelBuilder.Entity("DAL.Entities.ShopItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ArticleCode")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("article_code");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("category");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string>("ProductUrl")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("product_url");
+
+                    b.PrimitiveCollection<double[]>("VggVector")
+                        .IsRequired()
+                        .HasColumnType("double precision[]")
+                        .HasColumnName("vgg_vector");
+
+                    b.HasKey("Id")
+                        .HasName("pk_shop_items");
+
+                    b.HasIndex("ArticleCode")
+                        .IsUnique()
+                        .HasDatabaseName("ix_shop_items_article_code");
+
+                    b.ToTable("shop_items", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.Style", b =>
@@ -1236,7 +1285,7 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            TemperatureSuitabilityName = "Extra could (-30 to -20)"
+                            TemperatureSuitabilityName = "Extra cold (-30 to -20)"
                         },
                         new
                         {
@@ -1289,72 +1338,162 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            TypeName = "Jacket"
+                            TypeName = "Dress"
                         },
                         new
                         {
                             Id = 2,
-                            TypeName = "Coat"
+                            TypeName = "Tee"
                         },
                         new
                         {
                             Id = 3,
-                            TypeName = "T-Shirt"
-                        },
-                        new
-                        {
-                            Id = 4,
                             TypeName = "Blouse"
                         },
                         new
                         {
-                            Id = 5,
-                            TypeName = "Sweatshirt"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            TypeName = "Jeans"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            TypeName = "Trousers"
-                        },
-                        new
-                        {
-                            Id = 8,
+                            Id = 4,
                             TypeName = "Shorts"
                         },
                         new
                         {
+                            Id = 5,
+                            TypeName = "Tank"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            TypeName = "Skirt"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            TypeName = "Cardigan"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            TypeName = "Sweater"
+                        },
+                        new
+                        {
                             Id = 9,
-                            TypeName = "Evening Dress"
+                            TypeName = "Jacket"
                         },
                         new
                         {
                             Id = 10,
-                            TypeName = "Casual Dress"
+                            TypeName = "Top"
                         },
                         new
                         {
                             Id = 11,
-                            TypeName = "Sundress"
+                            TypeName = "Blazer"
                         },
                         new
                         {
                             Id = 12,
-                            TypeName = "Sneakers"
+                            TypeName = "Jeans"
                         },
                         new
                         {
                             Id = 13,
-                            TypeName = "Boots"
+                            TypeName = "Jumpsuit"
                         },
                         new
                         {
                             Id = 14,
+                            TypeName = "Leggings"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            TypeName = "Hoodie"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            TypeName = "Sweatpants"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            TypeName = "Coat"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            TypeName = "Parka"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            TypeName = "Jeggings"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            TypeName = "Chinos"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            TypeName = "Culottes"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            TypeName = "Flannel"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            TypeName = "Bomber"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            TypeName = "Anorak"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            TypeName = "Turtleneck"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            TypeName = "Peacoat"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            TypeName = "Sneakers"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            TypeName = "Boots"
+                        },
+                        new
+                        {
+                            Id = 29,
                             TypeName = "Heels"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            TypeName = "Flats"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            TypeName = "Sandals"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            TypeName = "Loafers"
                         });
                 });
 
@@ -1390,86 +1529,194 @@ namespace DAL.Migrations
                         new
                         {
                             Id = 1,
-                            CategoryID = 1,
-                            TypeID = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryID = 1,
+                            CategoryID = 2,
                             TypeID = 2
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 2,
                             CategoryID = 2,
                             TypeID = 3
                         },
                         new
                         {
-                            Id = 4,
-                            CategoryID = 2,
-                            TypeID = 4
-                        },
-                        new
-                        {
-                            Id = 5,
+                            Id = 3,
                             CategoryID = 2,
                             TypeID = 5
                         },
                         new
                         {
-                            Id = 6,
-                            CategoryID = 3,
-                            TypeID = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryID = 3,
-                            TypeID = 7
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CategoryID = 3,
-                            TypeID = 8
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CategoryID = 4,
-                            TypeID = 9
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CategoryID = 4,
+                            Id = 4,
+                            CategoryID = 2,
                             TypeID = 10
                         },
                         new
                         {
+                            Id = 5,
+                            CategoryID = 2,
+                            TypeID = 22
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryID = 2,
+                            TypeID = 25
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryID = 6,
+                            TypeID = 8
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryID = 6,
+                            TypeID = 7
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryID = 6,
+                            TypeID = 15
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryID = 1,
+                            TypeID = 9
+                        },
+                        new
+                        {
                             Id = 11,
-                            CategoryID = 4,
+                            CategoryID = 1,
                             TypeID = 11
                         },
                         new
                         {
                             Id = 12,
-                            CategoryID = 5,
-                            TypeID = 12
+                            CategoryID = 1,
+                            TypeID = 17
                         },
                         new
                         {
                             Id = 13,
-                            CategoryID = 5,
-                            TypeID = 13
+                            CategoryID = 1,
+                            TypeID = 18
                         },
                         new
                         {
                             Id = 14,
-                            CategoryID = 5,
+                            CategoryID = 1,
+                            TypeID = 23
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CategoryID = 1,
+                            TypeID = 24
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CategoryID = 1,
+                            TypeID = 26
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CategoryID = 3,
+                            TypeID = 4
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CategoryID = 3,
+                            TypeID = 6
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CategoryID = 3,
+                            TypeID = 12
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CategoryID = 3,
                             TypeID = 14
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CategoryID = 3,
+                            TypeID = 16
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CategoryID = 3,
+                            TypeID = 19
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CategoryID = 3,
+                            TypeID = 20
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CategoryID = 3,
+                            TypeID = 21
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CategoryID = 5,
+                            TypeID = 27
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CategoryID = 5,
+                            TypeID = 28
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CategoryID = 5,
+                            TypeID = 29
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CategoryID = 5,
+                            TypeID = 30
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CategoryID = 5,
+                            TypeID = 31
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CategoryID = 5,
+                            TypeID = 32
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CategoryID = 4,
+                            TypeID = 1
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CategoryID = 4,
+                            TypeID = 13
                         });
                 });
 
