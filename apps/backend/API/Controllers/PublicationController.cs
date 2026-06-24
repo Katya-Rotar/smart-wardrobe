@@ -122,5 +122,17 @@ namespace API.Controllers
             var publications = await _publicationService.GetSavedPublicationsAsync(userId, parameters);
             return Ok(publications);
         }
+        
+        [Authorize]
+        [HttpGet("search-by-item/{itemId}")]
+        public async Task<ActionResult<IEnumerable<PublicationListDto>>> SearchBySimilarItem(int itemId, CancellationToken cancellationToken)
+        {
+            var publications = await _publicationService.SearchPublicationsBySimilarItemAsync(itemId, cancellationToken);
+    
+            if (publications == null || !publications.Any())
+                return Ok(new List<PublicationListDto>());
+
+            return Ok(publications);
+        }
     }
 }
