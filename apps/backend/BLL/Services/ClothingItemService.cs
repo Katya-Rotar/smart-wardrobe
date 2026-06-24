@@ -81,7 +81,25 @@ namespace BLL.Services
                 if (clothingItem == null) throw new KeyNotFoundException("Clothing item not found.");
 
                 _mapper.Map(clothingItemDto, clothingItem);
+                
+                if (clothingItemDto.SeasonIds != null)
+                {
+                    clothingItem.Seasons = clothingItemDto.SeasonIds.Select(id => new ClothingItemSeason 
+                    { 
+                        ClothingItemID = clothingItem.Id, 
+                        SeasonID = id 
+                    }).ToList();
+                }
 
+                if (clothingItemDto.StyleIds != null)
+                {
+                    clothingItem.Styles = clothingItemDto.StyleIds.Select(id => new ClothingItemStyle 
+                    { 
+                        ClothingItemID = clothingItem.Id, 
+                        StyleID = id 
+                    }).ToList();
+                }
+                
                 await _unitOfWork.ClothingItems.UpdateAsync(clothingItem);
                 await _unitOfWork.SaveAsync();
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);

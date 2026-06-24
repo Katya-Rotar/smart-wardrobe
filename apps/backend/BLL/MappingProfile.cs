@@ -29,8 +29,16 @@ public class MappingProfile : Profile
         CreateMap(typeof(PagedList<>), typeof(PagedList<>))
             .ConvertUsing(typeof(PagedListConverter<,>));
         
-        CreateMap<ClothingItem, ClothingItemDto>().ReverseMap();
-        CreateMap<CreateClothingItemDto, ClothingItem>().ReverseMap();
+        CreateMap<CreateClothingItemDto, ClothingItem>()
+            .ForMember(dest => dest.Seasons, opt => opt.MapFrom(src => 
+                src.SeasonIds.Select(id => new ClothingItemSeason { SeasonID = id })))
+            .ForMember(dest => dest.Styles, opt => opt.MapFrom(src => 
+                src.StyleIds.Select(id => new ClothingItemStyle { StyleID = id })));
+        CreateMap<ClothingItemDto, ClothingItem>()
+            .IncludeBase<CreateClothingItemDto, ClothingItem>();
+        CreateMap<ClothingItem, ClothingItemDto>()
+            .ForMember(dest => dest.SeasonIds, opt => opt.MapFrom(src => src.Seasons.Select(s => s.SeasonID).ToList()))
+            .ForMember(dest => dest.StyleIds, opt => opt.MapFrom(src => src.Styles.Select(s => s.StyleID).ToList()));
         CreateMap<ClothingItem, ClothingItemAllDto>()
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
             .ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.Type.TypeName))

@@ -17,4 +17,7 @@ public class CreateClothingItemDto
     public string? ImageURL { get; set; }
 
     public DateTime? LastWornDate { get; set; }
+    
+    public List<int> SeasonIds { get; set; } = new();
+    public List<int> StyleIds { get; set; } = new();
 }
