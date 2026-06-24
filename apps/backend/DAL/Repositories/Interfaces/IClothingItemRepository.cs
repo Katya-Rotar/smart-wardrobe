@@ -13,4 +13,5 @@ public interface IClothingItemRepository : IGenericRepository<ClothingItem>
     Task<PagedList<ClothingItem>> GetByTypeAsync(int typeId, int userId, ClothingItemParams parameters);
     
     Task<ClothingItem?> GetClothingItemDetailsAsync(int id);
+    Task<IEnumerable<ClothingItem>> GetByUserIdAsync(int userId);
 }

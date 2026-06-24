@@ -15,6 +15,15 @@ public class ClothingItemRepository : GenericRepository<ClothingItem>, IClothing
     private readonly ISortHelper<ClothingItem> _sortHelper;
     private readonly ISearchHelper<ClothingItem> _searchHelper;
     
+    public override async Task<ClothingItem> GetByIdAsync(int id)
+    {
+        return await context.ClothingItems
+                   .Include(c => c.Seasons)
+                   .Include(c => c.Styles)
+                   .FirstOrDefaultAsync(c => c.Id == id) 
+               ?? throw new KeyNotFoundException($"ClothingItem with ID {id} not found.");
+    }
+    
     public ClothingItemRepository(WardrobeDbContext context, ISortHelper<ClothingItem> sortHelper,
         ISearchHelper<ClothingItem> searchHelper) : base(context)
     {
@@ -120,5 +129,16 @@ public class ClothingItemRepository : GenericRepository<ClothingItem>, IClothing
             .Include(c => c.Styles).ThenInclude(cs => cs.Style)
             .Include(c => c.Seasons).ThenInclude(cs => cs.Season)
             .FirstOrDefaultAsync(c => c.Id == idItems);
+    }
+    
+    public async Task<IEnumerable<ClothingItem>> GetByUserIdAsync(int userId)
+    {
+        return await context.ClothingItems
+            .Include(c => c.Type)
+            .Include(c => c.Category)
+            .Include(c => c.Styles).ThenInclude(cs => cs.Style)
+            .Include(c => c.Seasons).ThenInclude(cs => cs.Season)
+            .Where(c => c.UserID == userId)
+            .ToListAsync();
     }
 }
