@@ -36,15 +36,6 @@ const CustomCalendar = () => {
 
       {(!isCompact || isExpanded) && (
         <>
-          <div className={styles.controls}>
-            <button className={styles.dateButton}>
-              <span>{date.toLocaleString("default", { day:"numeric", month: "short", year: "numeric" })}</span>
-            </button>
-            <a href="#" className={styles.viewLink}>
-              View
-            </a>
-          </div>
-
           <Calendar
             onChange={setDate}
             value={date}
