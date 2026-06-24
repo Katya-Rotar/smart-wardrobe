@@ -1,8 +1,9 @@
 ﻿'use client';
 
 import { useState } from 'react';
-import api from "../../../api/api"
+import api from "../../../api/api";
 import RegisterModal from "@/app/components/login/registerModal";
+import styles from "../../styles/authModal.module.css";
 
 export default function LoginModal({ onClose, onLoginSuccess }) {
     const [email, setEmail] = useState('');
@@ -21,87 +22,59 @@ export default function LoginModal({ onClose, onLoginSuccess }) {
             onLoginSuccess(response.data);
             onClose();
             window.location.reload();
-        } catch (error) {
+        } catch {
             setError('Невірний email або пароль');
         }
     };
 
     return (
         <>
-            {showRegisterModal && (
+            {showRegisterModal ? (
                 <RegisterModal onClose={() => setShowRegisterModal(false)} />
-            )}
+            ) : (
+                <div className={styles.overlay}>
+                    <div className={styles.modal}>
+                        <button onClick={onClose} className={styles.closeBtn}>
+                            ✕
+                        </button>
 
-            <div style={{
-                position: 'fixed',
-                top: 0, left: 0, right: 0, bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.5)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 500
-            }}>
-                <div style={{
-                    backgroundColor: 'white',
-                    padding: '2rem',
-                    borderRadius: '8px',
-                    width: '300px',
-                    position: 'relative'
-                }}>
-                    <button
-                        onClick={onClose}
-                        style={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            background: 'transparent',
-                            border: 'none',
-                            fontSize: '1.5rem',
-                            cursor: 'pointer',
-                        }}
-                        aria-label="Закрити"
-                    >
-                        &times;
-                    </button>
-                    <form onSubmit={handleSubmit}>
-                        <h2>Увійти</h2>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            required
-                            style={{ width: '100%', marginBottom: '1rem', padding: '0.5rem' }}
-                        />
-                        <input
-                            type="password"
-                            placeholder="Пароль"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            required
-                            style={{ width: '100%', marginBottom: '1rem', padding: '0.5rem' }}
-                        />
-                        <button type="submit" style={{ width: '100%', padding: '0.5rem' }}>
-                            Увійти
-                        </button>
-                        {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
-                        <button
-                            type="button"
-                            onClick={() => setShowRegisterModal(true)}
-                            style={{
-                                marginTop: '1rem',
-                                width: '100%',
-                                padding: '0.5rem',
-                                backgroundColor: '#f0f0f0',
-                                border: '1px solid #ccc',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Створити акаунт
-                        </button>
-                    </form>
+                        <h2 className={styles.title}>Ласкаво просимо</h2>
+                        <p className={styles.subtitle}>Увійдіть у свій акаунт</p>
+
+                        <form onSubmit={handleSubmit} className={styles.form}>
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                required
+                            />
+
+                            <input
+                                type="password"
+                                placeholder="Пароль"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                required
+                            />
+
+                            <button type="submit" className={styles.primaryBtn}>
+                                Увійти
+                            </button>
+
+                            {error && <p className={styles.error}>{error}</p>}
+
+                            <button
+                                type="button"
+                                onClick={() => setShowRegisterModal(true)}
+                                className={styles.secondaryBtn}
+                            >
+                                Створити акаунт
+                            </button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            )}
         </>
     );
 }

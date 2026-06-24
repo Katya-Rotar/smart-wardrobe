@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import styles from '../../styles/registerModal.module.css';
 import api from "../../../api/api";
+import AvatarCropModal from './avatarCropModal';
 
 // Cloudinary constants
 const CLOUD_NAME = "ddapkpo6c";
@@ -38,6 +39,8 @@ export default function RegisterModal({ onClose }) {
     const [success, setSuccess] = useState(false);
     const [photoFile, setPhotoFile] = useState(null);
     const [photoPreview, setPhotoPreview] = useState(null);
+    const [showCrop, setShowCrop] = useState(false);
+    const [tempImage, setTempImage] = useState(null);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,9 +49,15 @@ export default function RegisterModal({ onClose }) {
     const handlePhotoUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setPhotoFile(file);
-            setPhotoPreview(URL.createObjectURL(file));
+            const imageUrl = URL.createObjectURL(file);
+            setTempImage(imageUrl);
+            setShowCrop(true);
         }
+    };
+
+    const handleCropDone = (croppedFile) => {
+        setPhotoFile(croppedFile);
+        setPhotoPreview(URL.createObjectURL(croppedFile));
     };
 
     const handleSubmit = async (e) => {
@@ -83,58 +92,78 @@ export default function RegisterModal({ onClose }) {
     };
 
     return (
-        <div className={styles.modalOverlay}>
-            <div className={styles.modal}>
-                <h2>Створити акаунт</h2>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="Ім'я користувача"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="password"
-                        name="passwordHash"
-                        placeholder="Пароль"
-                        value={formData.passwordHash}
-                        onChange={handleChange}
-                        required
-                    />
+        <>
+            {/* Crop Modal */}
+            {showCrop && (
+                <AvatarCropModal
+                    image={tempImage}
+                    onClose={() => setShowCrop(false)}
+                    onCropDone={handleCropDone}
+                />
+            )}
 
-                    <label className={styles.photoLabel}>
-                        Фото профілю:
+            <div className={styles.overlay}>
+                <div className={styles.modal}>
+                    <button onClick={onClose} className={styles.closeBtn}>✕</button>
+
+                    <h2 className={styles.title}>Створити акаунт</h2>
+
+                    <form onSubmit={handleSubmit} className={styles.form}>
+
                         <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handlePhotoUpload}
+                            type="text"
+                            name="username"
+                            placeholder="Ім'я користувача"
+                            value={formData.username}
+                            onChange={handleChange}
+                            required
                         />
-                    </label>
 
-                    {photoPreview && (
-                        <img
-                            src={photoPreview}
-                            alt="Прев’ю фото"
-                            className={styles.photoPreview}
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
                         />
-                    )}
 
-                    <button type="submit">Зареєструватися</button>
-                </form>
-                {error && <p className={styles.error}>{error}</p>}
-                {success && <p className={styles.success}>Успішно створено!</p>}
-                <button onClick={onClose} className={styles.closeBtn}>Закрити</button>
+                        <input
+                            type="password"
+                            name="passwordHash"
+                            placeholder="Пароль"
+                            value={formData.passwordHash}
+                            onChange={handleChange}
+                            required
+                        />
+
+                        <label className={styles.photoLabel}>
+                            Фото профілю
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handlePhotoUpload}
+                            />
+                        </label>
+
+                        {photoPreview && (
+                            <img
+                                src={photoPreview}
+                                alt="Preview"
+                                className={styles.photoPreview}
+                            />
+                        )}
+
+                        <button type="submit" className={styles.primaryBtn}>
+                            Зареєструватися
+                        </button>
+
+                        {error && <p className={styles.error}>{error}</p>}
+                        {success && <p className={styles.success}>Успішно створено!</p>}
+
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 }

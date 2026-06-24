@@ -86,7 +86,7 @@ export default function UserProfile() {
 
     return (
         <div className={`${styles['user-profile']} ${isCompact ? styles.compact : ''}`} ref={dropdownRef}>
-            <button
+            {/*<button
                 className={styles['icon-button']}
                 onClick={() => {
                     setShowNotifications(!showNotifications);
@@ -94,7 +94,7 @@ export default function UserProfile() {
                 }}
             >
                 <img src="/notifications.svg" alt="Notifications" className={styles.icon} />
-            </button>
+            </button>*/}
 
             <div
                 className={styles['user-info']}

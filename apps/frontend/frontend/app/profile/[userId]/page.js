@@ -45,11 +45,21 @@ export default function UserProfilePage() {
     useEffect(() => {
         const token = getValidToken();
         setIsAuthenticated(!!token);
-        // Optionally determine own profile from server-side later
+
+        if (token && userId) {
+            try {
+                const decoded = JSON.parse(atob(token.split('.')[1]));
+                setIsOwnProfile(parseInt(decoded.userId) === parseInt(userId));
+            } catch {
+                setIsOwnProfile(false);
+            }
+        }
     }, [userId]);
 
     useEffect(() => {
         if (userId) {
+            setPublications([]);
+            setPageNumber(1);
             fetchUserInfo();
             fetchUserPublications(1);
         }
@@ -63,25 +73,39 @@ export default function UserProfilePage() {
 
     const fetchUserInfo = async () => {
         try {
-            const [userRes, followersRes, followingsRes] = await Promise.all([
-                api.get(`/user/${userId}`),
-                api.get(`/followers/${userId}/followers-count`),
-                api.get(`/followers/${userId}/following-count`)
-            ]);
-
+            const token = getValidToken();
+            const userRes = await api.get(`/user/${userId}`);
             setUser(userRes.data);
-            setFollowersCount(followersRes.data);
-            setFollowingsCount(followingsRes.data);
-
-            if (getValidToken() && !isOwnProfile) {
-                const isFollowingRes = await api.get(`/followers/is-following`, {
-                    params: { followingId: parseInt(userId) },
-                    headers: { Authorization: `Bearer ${getValidToken()}` }
-                });
-                setIsFollowing(isFollowingRes.data);
+            
+            try {
+                const followersRes = await api.get(`/followers/${userId}/followers-count`);
+                setFollowersCount(followersRes.data);
+            } catch {
+                setFollowersCount(0);
             }
+
+            try {
+                const followingsRes = await api.get(`/followers/${userId}/following-count`);
+                setFollowingsCount(followingsRes.data);
+            } catch {
+                setFollowingsCount(0);
+            }
+            
+            if (token) {
+                try {
+                    const isFollowingRes = await api.get(`/followers/is-following`, {
+                        params: { followingId: parseInt(userId) },
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setIsFollowing(isFollowingRes.data);
+                } catch {
+                    setIsFollowing(false);
+                }
+            }
+
         } catch (err) {
-            console.error('Failed to load user data', err);
+            console.error("User not found", err);
+            setUser({ username: "User not found" }); // щоб не зависало
         }
     };
 
@@ -111,11 +135,7 @@ export default function UserProfilePage() {
 
     const handleFollowToggle = async () => {
         const token = getValidToken();
-
-        if (!token) {
-            console.warn('Cannot follow without valid token');
-            return;
-        }
+        if (!token) return;
 
         try {
             const headers = {
@@ -157,23 +177,17 @@ export default function UserProfilePage() {
                 <div className="profile-info">
                     <h2>{user.username}</h2>
                     <div className="counts">
-                        <span>{followersCount} followers</span>
-                        <span>{followingsCount} follow</span>
+                        <span>{followersCount} followers </span>
+                        <span>{followingsCount} follow </span>
                     </div>
-                    {isAuthenticated && (
+
+                    {/* Кнопка показується тільки якщо авторизований і це не свій профіль */}
+                    {isAuthenticated && !isOwnProfile && (
                         <button
                             className={`follow-btn ${isFollowing ? 'following' : 'not-following'}`}
                             onClick={handleFollowToggle}
                         >
                             {isFollowing ? 'Subscribed' : 'Subscribe'}
-                        </button>
-                    )}
-                    {!isAuthenticated && (
-                        <button
-                            className="follow-btn disabled"
-                            disabled
-                        >
-                            Subscribe
                         </button>
                     )}
                 </div>

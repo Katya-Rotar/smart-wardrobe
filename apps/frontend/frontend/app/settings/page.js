@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/api';
 import styles from '../../app/settings/settingsPage.module.css';
+import AvatarCropModal from '../components/login/avatarCropModal';
 
 const CLOUD_NAME = 'ddapkpo6c';
 const UPLOAD_PRESET = 'unsigned_preset';
@@ -35,6 +36,10 @@ export default function SettingsPage() {
     const [password, setPassword] = useState(''); // окремо пароль, щоб не показувати хеш
     const [photoPreview, setPhotoPreview] = useState(null);
     const [photoFile, setPhotoFile] = useState(null);
+
+    const [showCrop, setShowCrop] = useState(false);
+    const [tempImage, setTempImage] = useState(null);
+
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
 
@@ -50,7 +55,6 @@ export default function SettingsPage() {
                     profileImage: data.profileImage,
                 });
                 setPhotoPreview(data.profileImage);
-                setPassword(''); // пароль не показуємо
             } catch (error) {
                 setError("Не вдалося завантажити дані користувача");
             }
@@ -69,9 +73,15 @@ export default function SettingsPage() {
     const handlePhotoChange = (e) => {
         const file = e.target.files?.[0];
         if (file) {
-            setPhotoFile(file);
-            setPhotoPreview(URL.createObjectURL(file));
+            const imageUrl = URL.createObjectURL(file);
+            setTempImage(imageUrl);
+            setShowCrop(true);
         }
+    };
+    
+    const handleCropDone = (croppedFile) => {
+        setPhotoFile(croppedFile);
+        setPhotoPreview(URL.createObjectURL(croppedFile));
     };
 
     const handleSave = async (e) => {
@@ -83,13 +93,12 @@ export default function SettingsPage() {
                 imageURL = await uploadImageToCloudinary(photoFile);
             }
 
-            // Формуємо об'єкт оновлення без поля passwordHash, якщо пароль не введено
             const updatedUser = {
                 ...formData,
                 profileImage: imageURL,
             };
             if (password.trim() !== '') {
-                updatedUser.passwordHash = password.trim(); // передаємо новий пароль (бекенд його захешує)
+                updatedUser.passwordHash = password.trim();
             }
 
             await api.put(`/User/${formData.id}`, updatedUser);
@@ -119,6 +128,25 @@ export default function SettingsPage() {
         <div className={styles.settingsContainer}>
             <h2>Налаштування профілю</h2>
             <form onSubmit={handleSave} className={styles.form}>
+                <label className={styles.avatarSection}>
+                    <div className={styles.avatarWrapper}>
+                        <img
+                            src={photoPreview || '/default-avatar.png'}
+                            alt="Фото"
+                            className={styles.avatarPreview}
+                        />
+                        <div className={styles.avatarOverlay}>
+                            Змінити фото
+                        </div>
+                    </div>
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
+                        hidden
+                    />
+                </label>
                 <label>Ім’я користувача</label>
                 <input
                     type="text"
@@ -136,32 +164,33 @@ export default function SettingsPage() {
                 <label>Пароль (залиште порожнім, щоб не змінювати)</label>
                 <input
                     type="password"
-                    name="password"
                     value={password}
                     onChange={handlePasswordChange}
                     placeholder="Новий пароль"
                 />
-                <label>Фото профілю</label>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                />
-                {photoPreview && (
-                    <img
-                        src={photoPreview}
-                        alt="Фото"
-                        className={styles.photoPreview}
-                    />
-                )}
 
-                <button type="submit">Зберегти зміни</button>
-                <button type="button" className={styles.deleteBtn} onClick={handleDeleteAccount}>
+                <button type="submit" className={styles.submitBtn}>
+                    Зберегти зміни
+                </button>
+
+                <button
+                    type="button"
+                    className={styles.deleteBtn}
+                    onClick={handleDeleteAccount}
+                >
                     Видалити акаунт
                 </button>
                 {success && <p className={styles.success}>Дані збережено</p>}
                 {error && <p className={styles.error}>{error}</p>}
             </form>
+            
+            {showCrop && (
+                <AvatarCropModal
+                    image={tempImage}
+                    onClose={() => setShowCrop(false)}
+                    onCropDone={handleCropDone}
+                />
+            )}
         </div>
     );
 }
