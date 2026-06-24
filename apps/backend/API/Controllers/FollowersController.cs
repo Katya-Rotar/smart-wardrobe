@@ -76,15 +76,13 @@ namespace API.Controllers
             return Ok(users);
         }
         
-        [Authorize]
         [HttpGet("{userId}/following-count")]
         public async Task<IActionResult> GetFollowingCount(int userId)
         {
             var count = await _followerService.GetFollowingCountAsync(userId);
             return Ok(count);
         }
-
-        [Authorize]
+        
         [HttpGet("{userId}/followers-count")]
         public async Task<IActionResult> GetFollowerCount(int userId)
         {

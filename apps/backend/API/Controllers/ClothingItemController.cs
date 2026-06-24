@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using BLL.DTO;
 using BLL.Services.Interfaces;
+using BLL.Services;
 using DAL.Entities;
 using DAL.Helpers;
 using DAL.Helpers.Params;
@@ -14,10 +15,14 @@ namespace API.Controllers
     public class ClothingItemController : ControllerBase
     {
         private readonly IClothingItemService _clothingItemService;
+        private readonly MlServiceClient _mlService;
+        private readonly IRecommendationService _recommendationService;
 
-        public ClothingItemController(IClothingItemService clothingItemService)
+        public ClothingItemController(IClothingItemService clothingItemService, MlServiceClient mlService, IRecommendationService recommendationService)
         {
             _clothingItemService = clothingItemService;
+            _mlService = mlService;
+            _recommendationService = recommendationService;
         }
 
         // GET: api/clothingitem
@@ -63,7 +68,7 @@ namespace API.Controllers
         // GET: api/clothingitem/details/{id}
         [Authorize]
         [HttpGet("details/{id}")]
-        public async Task<ActionResult<ClothingItem>> GetClothingItemDetailsAsync(int id)
+        public async Task<ActionResult<ClothingItemAllDto>> GetClothingItemDetailsAsync(int id)
         {
             var clothingItem = await _clothingItemService.GetClothingItemDetailsAsync(id);
             return Ok(clothingItem);
@@ -110,6 +115,15 @@ namespace API.Controllers
         public async Task<ActionResult> UpdateClothingItemAsync(int id, [FromBody] ClothingItemDto clothingItemDto, 
             CancellationToken cancellationToken)
         {
+            if (id != clothingItemDto.Id) 
+                return BadRequest("ID mismatch");
+
+            var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdFromToken == null || !int.TryParse(userIdFromToken, out var userId))
+                return Unauthorized();
+            
+            clothingItemDto.UserID = userId; 
+
             await _clothingItemService.UpdateClothingItemAsync(clothingItemDto, cancellationToken);
             return NoContent();
         }
@@ -121,6 +135,42 @@ namespace API.Controllers
         {
             await _clothingItemService.DeleteClothingItemAsync(id, cancellationToken);
             return NoContent();
+        }
+        
+        [Authorize]
+        [HttpPost("predict")]
+        public async Task<IActionResult> Predict(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("Файл не завантажено");
+
+            try 
+            {
+                using var stream = file.OpenReadStream();
+                var prediction = await _mlService.PredictImageAsync(stream, file.FileName, file.ContentType);
+
+                return Ok(prediction);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "ML Service error: " + ex.Message);
+            }
+        }
+        
+        [Authorize]
+        [HttpGet("generate")]
+        public async Task<IActionResult> GetRecommendations([FromQuery] float temp, [FromQuery] int weatherCode, [FromQuery] int styleId)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim == null) return Unauthorized();
+            
+            if (!int.TryParse(userIdClaim.Value, out int userId)) 
+            {
+                return BadRequest("Invalid User ID in token.");
+            }
+            
+            var result = await _recommendationService.GetRecommendedItemsAsync(userId, temp, weatherCode, styleId);
+            return Ok(result);
         }
     }
 }

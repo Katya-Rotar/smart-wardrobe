@@ -96,7 +96,7 @@ builder.Services.AddScoped<ITypeService, TypeService>();
 builder.Services.AddScoped<ITemperatureSuitabilityService, TemperatureSuitabilityService>();
 builder.Services.AddScoped<IStyleService, StyleService>();
 builder.Services.AddScoped<ISeasonService, SeasonService>();
-builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddScoped<ITagService, TagService>(); 
 builder.Services.AddScoped<IOutfitService, OutfitService>();
 builder.Services.AddScoped<IOutfitGroupService, OutfitGroupService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -106,6 +106,22 @@ builder.Services.AddScoped<ISavedPostService, SavedPostService>();
 builder.Services.AddScoped<IPostLikeService, PostLikeService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ICommentLikeService, CommentLikeService>();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddHttpClient<MlServiceClient>(client => 
+{
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
+
+builder.Services.AddHttpClient<IRecommendationService, RecommendationService>(client => 
+{
+    var baseUrl = builder.Configuration["MLServices:RecommendationUrl"] 
+                  ?? "http://smart-wardrobe.ml.recommendation:8002";
+    
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
 
 builder.Services.AddCors(options =>
 {
