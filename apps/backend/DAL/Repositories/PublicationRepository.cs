@@ -117,4 +117,34 @@ public class PublicationRepository : GenericRepository<Publication>, IPublicatio
 
         return PagedList<Publication>.ToPagedList(query, parameters.PageNumber, parameters.PageSize);
     }
+    
+    public async Task<List<Publication>> GetByIdsAsync(List<int> ids)
+    {
+        if (ids == null || !ids.Any())
+            return new List<Publication>();
+
+        return await context.Publications
+            .Include(p => p.PublicationTags).ThenInclude(pt => pt.Tag)
+            .Include(p => p.User)
+            .Include(p => p.Outfit)
+            .ThenInclude(o => o.Items).ThenInclude(oi => oi.ClothingItem)
+            .Where(p => ids.Contains(p.Id))
+            .ToListAsync();
+    }
+
+    public async Task<List<object>> GetLikesInteractionLogAsync()
+    {
+        return await context.Likes
+            .Select(l => new { user_id = l.UserID, item_id = l.PublicationID, weight = 3 })
+            .Cast<object>()
+            .ToListAsync();
+    }
+
+    public async Task<List<object>> GetSavesInteractionLogAsync()
+    {
+        return await context.SavedPosts
+            .Select(sp => new { user_id = sp.UserID, item_id = sp.PublicationID, weight = 5 })
+            .Cast<object>()
+            .ToListAsync();
+    }
 }

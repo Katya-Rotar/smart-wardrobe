@@ -1,16 +1,18 @@
-﻿import React from 'react';
+﻿'use client';
+import React from 'react';
 import LikeButton from './likeButton';
 import CommentSection from './commentSection';
 import OutfitItemsList from './outfitItemsList';
 import SavePostButton from './savePostButton';
 import Link from 'next/link';
 
-export default function PublicationDetail({ publication }) {
+export default function PublicationDetail({ publication, onItemClick }) {
     return (
         <div className="publication-detail">
             <img src={publication.imageURL} alt="Outfit" className="main-image" />
 
-            <OutfitItemsList items={publication.outfitItemImages} />
+            {/* Передаємо його сюди: */}
+            <OutfitItemsList items={publication.outfitItemImages} onItemClick={onItemClick} />
 
             <div className="publication-info">
                 <div style={{ display: 'flex', gap: '10px' }}>
@@ -18,7 +20,7 @@ export default function PublicationDetail({ publication }) {
                     <SavePostButton publicationId={publication.id} />
                 </div>
                 <p className="tags">
-                    {publication.tags.map(tag => `#${tag}`).join(' ')}
+                    {publication.tags ? publication.tags.map(tag => `#${tag}`).join(' ') : ''}
                 </p>
                 <div className="user-info">
                     <img src={publication.userImage || '/default-avatar.png'} alt="user" />

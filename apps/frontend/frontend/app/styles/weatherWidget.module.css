@@ -1,13 +1,15 @@
 .weather-widget {
   width: 270px;
-  background-color: #88AEDD;
+  background: linear-gradient(135deg, #88AEDD, #628ECB);
   border-radius: 20px;
   color: #ffffff;
   text-align: center;
-  padding: 12px;
+  padding: 10px;
   font-family: 'Chelsea Market', cursive;
+  transition: 0.3s ease;
 }
 
+/* HEADER */
 .weather-header {
   display: flex;
   justify-content: space-between;
@@ -24,10 +26,12 @@
   background: none;
   border: none;
   cursor: pointer;
+  color: white;
 }
 
+/* MAIN INFO */
 .weather-main {
-  margin: 10px 0;
+  margin: 6px 0;
 }
 
 .day {
@@ -40,13 +44,13 @@
 .temp {
   font-size: 36px;
   font-weight: bold;
-  margin: 5px 0;
+  margin: 3px 0;
   color: #ffffff;
 }
 
 .condition {
   font-size: 16px;
-  margin: 5px 0;
+  margin: 6px 0;
   color: #375885;
 }
 
@@ -54,6 +58,9 @@
   font-size: 14px;
   margin: 5px 0;
   color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .date {
@@ -62,6 +69,93 @@
   color: #fff;
 }
 
+/* EDIT BUTTON */
+.editButton {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  margin-left: 6px;
+  padding: 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.editButton svg {
+  width: 14px;
+  height: 14px;
+  color: #ffffff;
+}
+
+.editButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* SEARCH */
+.searchContainer {
+  position: relative;
+  margin-top: 10px;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border-radius: 12px;
+  padding: 4px 8px;
+}
+
+.cityInput {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  width: 100%;
+}
+
+/* DROPDOWN */
+.suggestions {
+  position: absolute;
+  width: 100%;
+  background: white;
+  color: #333;
+  border-radius: 12px;
+  margin-top: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
+.suggestionItem {
+  padding: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestionItem:hover {
+  background-color: #f5f7fb;
+}
+
+/* SCROLLBAR */
+.suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.suggestions::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+/* FORECAST */
 .weather-forecast {
   display: flex;
   flex-wrap: wrap;
@@ -69,7 +163,7 @@
   align-content: center;
   background-color: #628ECB;
   border-radius: 20px;
-  width: 100%; 
+  width: 100%;
 }
 
 .forecast-item {
@@ -86,23 +180,30 @@
   font-weight: bold;
 }
 
+.minTemp {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+/* COMPACT MODE */
 .weather-widget.compact {
-  width: 44px; 
+  width: 44px;
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 5px;
-  background-color: #88AEDD;
 }
 
 .compact .weather-header {
   justify-content: center;
   margin-bottom: 0;
 }
+
 .compact .weather-header h2 {
   display: none;
 }
+
 .compact .weather-main,
 .compact .weather-forecast {
   display: none;
