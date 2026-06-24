@@ -1,25 +1,26 @@
-import React from 'react';
+import React from "react";
 import Link from "next/link";
-import styles from '../../styles/outfitCard.module.css';
+import styles from "../../styles/outfitCard.module.css";
 
 const OutfitCard = ({ outfit }) => {
-  return (
-    <div className={styles.card}>
-      <h3>
-        <Link href={`/outfit/${outfit.id}`}>
-          Outfit
+    return (
+        <Link href={`/outfit/${outfit.id}`} className={styles.card}>
+
+            <div className={styles.header}>
+                <h3>Outfit</h3>
+                <span className={styles.count}>{outfit.itemNames.length} items</span>
+            </div>
+
+            <div className={styles.grid}>
+                {outfit.itemNames.slice(0, 4).map((item) => (
+                    <div key={item.id} className={styles.imageWrap}>
+                        <img src={item.imageURL} alt={item.name} />
+                    </div>
+                ))}
+            </div>
+
         </Link>
-      </h3>
-      <div className={styles.items}>
-        {outfit.itemNames.map(item => (
-          <div key={item.id} className={styles.item}>
-            <img src={item.imageURL} alt={item.name} />
-            <p>{item.name}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    );
 };
 
 export default OutfitCard;

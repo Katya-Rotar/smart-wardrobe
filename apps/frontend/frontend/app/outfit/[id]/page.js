@@ -4,7 +4,11 @@ import ItemCard from "../../components/wardrobe/itemCard";
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import api from '../../../api/api';
-import CreatePublicationModal from '../../components/createPublicationModal'
+import CreatePublicationModal from '../../components/createPublicationModal';
+// 👈 1. ІМПОРТУЄМО СТИЛІ ЯК МОДУЛЬ
+import styles from '../../styles/outfitDetails.module.css';
+// Іконки для інтерфейсу
+import { FaEdit, FaTrashAlt, FaShareSquare, FaTshirt } from 'react-icons/fa';
 
 const OutfitDetailsPage = () => {
     const { id } = useParams();
@@ -30,7 +34,7 @@ const OutfitDetailsPage = () => {
             handleCloseModal();
         }
     };
-    
+
     useEffect(() => {
         async function fetchOutfit() {
             setLoading(true);
@@ -60,7 +64,7 @@ const OutfitDetailsPage = () => {
         setDeleting(true);
         try {
             await api.delete(`/outfit/${id}`);
-            router.push('/outfit'); // ← або твоя сторінка зі списком образів
+            router.push('/outfit');
         } catch (error) {
             console.error('Failed to delete outfit:', error);
             alert('Failed to delete outfit.');
@@ -69,40 +73,93 @@ const OutfitDetailsPage = () => {
         }
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (!outfit) return <p>Outfit not found.</p>;
+    if (loading) return <div className={styles.centerStatus}>Завантаження деталей образу...</div>;
+    if (!outfit) return <div className={styles.centerStatus}>Образ не знайдено.</div>;
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h1>Outfit Details</h1>
+        <div className={styles.container}>
+            {/* Верхня частина: Заголовок та Кнопки управління */}
+            <div className={styles.headerSection}>
+                <h1 className={styles.title}>Outfit Details</h1>
 
-            <div style={{ marginBottom: '20px' }}>
-                <button onClick={handleEdit} style={{ marginRight: '10px' }}>Edit Outfit</button>
-                <button onClick={handleDelete} disabled={deleting}>
-                    {deleting ? 'Deleting...' : 'Delete Outfit'}
-                </button>
+                <div className={styles.actionButtons}>
+                    <button onClick={handleEdit} className={`${styles.btn} ${styles.btnEdit}`}>
+                        <FaEdit /> Edit Outfit
+                    </button>
+                    <button onClick={handleDelete} disabled={deleting} className={`${styles.btn} ${styles.btnDelete}`}>
+                        <FaTrashAlt /> {deleting ? 'Deleting...' : 'Delete Outfit'}
+                    </button>
+                    <button onClick={handleOpenModal} className={`${styles.btn} ${styles.btnPublish}`}>
+                        <FaShareSquare /> Create Publication
+                    </button>
+                </div>
             </div>
 
-            <p><strong>Temperature suitability:</strong> {outfit.temperatureSuitabilityName}</p>
-            <p><strong>Styles:</strong> {outfit.styleNames.join(', ')}</p>
-            <p><strong>Seasons:</strong> {outfit.seasonNames.join(', ')}</p>
-            <p><strong>Tags:</strong> {outfit.tags.join(', ')}</p>
-            <p><strong>Groups:</strong> {outfit.groupNames.join(', ')}</p>
+            {/* Блок метаданих: Стилі, Сезони, Температура */}
+            <div className={styles.metaGrid}>
+                <div className={styles.metaCard}>
+                    <span className={styles.metaLabel}>🌡️ Temperature suitability</span>
+                    <span className={styles.metaValue}>{outfit.temperatureSuitabilityName}</span>
+                </div>
 
-            <h2>Items:</h2>
-            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-                {outfit.itemNames.map(item => (
-                    <ItemCard
-                        key={item.id}
-                        id={item.id}
-                        name={item.name}
-                        image={item.imageURL}
-                    />
-                ))}
+                <div className={styles.metaCard}>
+                    <span className={styles.metaLabel}>✨ Styles</span>
+                    <span className={styles.metaValue}>
+                        {outfit.styleNames && outfit.styleNames.length > 0
+                            ? outfit.styleNames.join(', ')
+                            : 'Не вказано'}
+                    </span>
+                </div>
+
+                <div className={styles.metaCard}>
+                    <span className={styles.metaLabel}>📅 Seasons</span>
+                    <span className={styles.metaValue}>
+                        {outfit.seasonNames && outfit.seasonNames.length > 0
+                            ? outfit.seasonNames.join(', ')
+                            : 'Не вказано'}
+                    </span>
+                </div>
+
+                <div className={styles.metaCard}>
+                    <span className={styles.metaLabel}>👥 Groups</span>
+                    <span className={styles.metaValue}>
+                        {outfit.groupNames && outfit.groupNames.length > 0
+                            ? outfit.groupNames.join(', ')
+                            : 'Не вказано'}
+                    </span>
+                </div>
             </div>
-            <button onClick={handleOpenModal} style={{ marginLeft: '10px' }}>
-                Create Publication
-            </button>
+
+            {/* Окремий блок для красивих тегів */}
+            {outfit.tags && outfit.tags.length > 0 && (
+                <div style={{ marginBottom: '30px' }}>
+                    <span className={styles.metaLabel} style={{ display: 'block', marginBottom: '8px' }}>🏷️ Tags</span>
+                    <div>
+                        {outfit.tags.map((tag, idx) => (
+                            <span key={idx} className={styles.tagBadge}>#{tag}</span>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Нижня частина: Сітка елементів одягу */}
+            <div className={styles.itemsSection}>
+                <h2 className={styles.sectionTitle}>
+                    <FaTshirt /> Items in this outfit:
+                </h2>
+                <div className={styles.itemsGrid}>
+                    {outfit.itemNames && outfit.itemNames.map(item => (
+                        <ItemCard
+                            key={item.id}
+                            id={item.id}
+                            name={item.name}
+                            image={item.imageURL}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* Модалка створення публікації */}
             {showModal && (
                 <CreatePublicationModal
                     outfitId={outfit.id}

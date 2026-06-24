@@ -1,16 +1,15 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import api from "@/api/api"; // Якщо це окремий інстанс axios - класно
-import "./CreateOutfitPage.css"
-import "@/app/styles/wardrobe/itemCard.css";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import api from "@/api/api";
+import "./CreateOutfitPage.css";
 
-export default function CreateOutfitPage({ userId, outfitId  }) {
+export default function CreateOutfitPage({ userId, outfitId }) {
     const router = useRouter();
-    
+
     const [formData, setFormData] = useState({
-        userID: userId, // id користувача з пропсів
+        userID: userId,
         temperatureSuitabilityID: 1,
         tagIDs: [],
         styleIDs: [],
@@ -18,185 +17,287 @@ export default function CreateOutfitPage({ userId, outfitId  }) {
         clothingItemIDs: [],
     });
 
-    const [styles, setStyles] = useState([]);
+    // --- AI ТА РЕКОМЕНДАЦІЇ ---
+    const [recommendedIds, setRecommendedIds] = useState([]);
+    const [isMlLoading, setIsMlLoading] = useState(false);
+    // Окремий фільтр стилю спеціально для AI (за замовчуванням 1 - Casual)
+    const [aiStyleFilter, setAiStyleFilter] = useState(1);
+
+    // Списки для вибору
+    const [stylesList, setStyles] = useState([]);
     const [seasons, setSeasons] = useState([]);
     const [temps, setTemps] = useState([]);
     const [tags, setTags] = useState([]);
     const [clothingItems, setClothingItems] = useState([]);
-    const [filteredItems, setFilteredItems] = useState([]);
+    const [groupedData, setGroupedData] = useState({});
 
+    // --- ФУНКЦІЯ ЗАПИТУ ДО ML ЧЕРЕЗ БЕКЕНД ---
+    const getSmartRecommendations = async () => {
+        setIsMlLoading(true);
+        try {
+            const savedWeather = localStorage.getItem("lastWeatherData");
+            const weather = savedWeather
+                ? JSON.parse(savedWeather)
+                : { temp: 20, code: 0 };
+
+            const res = await api.get("/ClothingItem/generate", {
+                params: {
+                    temp: weather.temp,
+                    weatherCode: weather.code,
+                    styleId: aiStyleFilter // Використовуємо наш AI фільтр
+                }
+            });
+
+            const ids = Array.isArray(res.data)
+                ? res.data.map(item => Number(item.id || item))
+                : [];
+
+            setRecommendedIds(ids);
+        } catch (err) {
+            console.error("ML Recommendations Error:", err);
+        } finally {
+            setIsMlLoading(false);
+        }
+    };
+
+    // --- ПОЧАТКОВЕ ЗАВАНТАЖЕННЯ ДАНИХ ---
     useEffect(() => {
         async function fetchData() {
             try {
-                // Завантажуємо всі потрібні дані одночасно
-                const [tagRes, styleRes, seasonRes, tempRes, clothingRes] = await Promise.all([
-                    api.get('/Tag'),
-                    api.get('/Style'),
-                    api.get('/Season'),
-                    api.get('/TemperatureSuitability'),
-                    api.get(`/ClothingItem`, { params: { UserId: userId } })
-                ]);
+                const [tagRes, styleRes, seasonRes, tempRes, groupedRes] =
+                    await Promise.all([
+                        api.get("/Tag"),
+                        api.get("/Style"),
+                        api.get("/Season"),
+                        api.get("/TemperatureSuitability"),
+                        api.get("/ClothingItem/grouped"), // Твій ендпоінт
+                    ]);
 
                 setTags(tagRes.data);
                 setStyles(styleRes.data);
                 setSeasons(seasonRes.data);
                 setTemps(tempRes.data);
-                setClothingItems(clothingRes.data);
-                setFilteredItems(clothingRes.data);
+
+                // 1. Зберігаємо для рендеру підкатегорій (те, що викликало помилку)
+                setGroupedData(groupedRes.data || {});
+
+                // 2. Робимо "плоский" масив для роботи AI та вибраних речей
+                const allItems = Object.values(groupedRes.data || {})
+                    .flat()
+                    .map(i => ({ ...i, id: Number(i.id) }));
+                setClothingItems(allItems);
+
                 if (outfitId) {
                     const outfitRes = await api.get(`/Outfit/${outfitId}`);
                     const outfit = outfitRes.data;
-
-                    console.log("Outfit data from backend:", outfit);
-
-                    // Підставляємо отримані дані в форму
                     setFormData({
                         userID: userId,
                         temperatureSuitabilityID: outfit.temperatureSuitabilityID,
-                        tagIDs: outfit.tagIDs || [],
-                        styleIDs: outfit.styleIDs || [],
-                        seasonIDs: outfit.seasonIDs || [],
-                        clothingItemIDs: outfit.clothingItemIDs || [],
+                        tagIDs: (outfit.tagIDs || []).map(id => Number(id)),
+                        styleIDs: (outfit.styleIDs || []).map(id => Number(id)),
+                        seasonIDs: (outfit.seasonIDs || []).map(id => Number(id)),
+                        clothingItemIDs: (outfit.clothingItemIDs || []).map(id => Number(id)),
                     });
                 }
             } catch (err) {
-                console.error('Failed request:', err);
+                console.error("Error loading data:", err);
             }
         }
         fetchData();
     }, [userId, outfitId]);
 
-    // Функція для додавання/видалення id з масиву у formData
+    // Оновлення рекомендацій при зміні AI-фільтра або завантаженні речей
+    useEffect(() => {
+        if (clothingItems.length > 0) {
+            getSmartRecommendations();
+        }
+    }, [aiStyleFilter, clothingItems.length]);
+
+    // Слухач події оновлення погоди з віджета
+    useEffect(() => {
+        const handleWeatherUpdate = () => {
+            getSmartRecommendations();
+        };
+
+        window.addEventListener("weatherUpdated", handleWeatherUpdate);
+        return () => window.removeEventListener("weatherUpdated", handleWeatherUpdate);
+    }, [aiStyleFilter]);
+
+    // --- ОБРОБНИКИ ПОДІЙ ---
     const toggleId = (field, id) => {
-        setFormData(prev => ({
+        const numId = Number(id);
+        setFormData((prev) => ({
             ...prev,
-            [field]: prev[field].includes(id)
-                ? prev[field].filter(i => i !== id)
-                : [...prev[field], id],
+            [field]: prev[field].includes(numId)
+                ? prev[field].filter((i) => i !== numId)
+                : [...prev[field], numId],
         }));
     };
 
-    // Видалення обраного елементу
     const removeClothingItem = (id) => {
-        setFormData(prev => ({
+        const numId = Number(id);
+        setFormData((prev) => ({
             ...prev,
-            clothingItemIDs: prev.clothingItemIDs.filter(itemId => itemId !== id)
+            clothingItemIDs: prev.clothingItemIDs.filter((i) => i !== numId),
         }));
     };
 
-    // Відправка форми на бекенд
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             if (outfitId) {
-                // Редагування: PUT-запит
                 await api.put(`/Outfit/${outfitId}`, formData);
-                alert('Аутфіт оновлено!');
             } else {
-                // Створення: POST-запит
-                await api.post('/Outfit', formData);
-                alert('Аутфіт створено!');
+                await api.post("/Outfit", formData);
             }
-            router.push('/outfit');
+            router.push("/outfit");
         } catch (err) {
             console.error(err);
-            alert('Помилка при збереженні аутфіту.');
+            alert("Помилка при збереженні образу");
         }
     };
 
+    // --- ПІДГОТОВКА СПИСКІВ ---
+    const smartItems = clothingItems
+        .filter(item => recommendedIds.includes(item.id))
+        .sort((a, b) => recommendedIds.indexOf(a.id) - recommendedIds.indexOf(b.id))
+        .slice(0, 10);
+
+    const groupedItems = clothingItems.reduce((acc, item) => {
+        const key = item.categoryName || "Other";
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(item);
+        return acc;
+    }, {});
+
     return (
         <form className="create-outfit-layout" onSubmit={handleSubmit}>
-            {/* Ліва частина - фільтри і вибір даних про образ */}
-            <div className="sidebar-filters">
-                <h3>Style</h3>
-                {styles.map(s => (
-                    <button
-                        key={s.id}
-                        type="button"
-                        className={`filter-btn ${formData.styleIDs.includes(s.id) ? 'active' : ''}`}
-                        onClick={() => toggleId('styleIDs', s.id)}
-                    >
-                        {s.styleName}
-                    </button>
-                ))}
+            {/* ЛІВА ЧАСТИНА: СПИСОК ОДЯГУ */}
+            <div className="clothing-list">
+                <h2>My Wardrobe</h2>
 
-                <h3>Season</h3>
-                {seasons.map(s => (
-                    <button
-                        key={s.id}
-                        type="button"
-                        className={`filter-btn ${formData.seasonIDs.includes(s.id) ? 'active' : ''}`}
-                        onClick={() => toggleId('seasonIDs', s.id)}
-                    >
-                        {s.seasonName}
-                    </button>
-                ))}
+                <div className="clothing-scroll">
+                    {/* ✨ БЛОК РОЗУМНИХ РЕКОМЕНДАЦІЙ */}
+                    <div className="category-block smart-section">
+                        <div className="smart-header">
+                            <h4>✨ Smart Suggestions</h4>
+                        </div>
 
-                <h3>Temperature</h3>
-                {temps.map(t => (
-                    <button
-                        key={t.id}
-                        type="button"
-                        className={`filter-btn ${formData.temperatureSuitabilityID === t.id ? 'active' : ''}`}
-                        onClick={() => setFormData(prev => ({ ...prev, temperatureSuitabilityID: t.id }))}
-                    >
-                        {t.temperatureSuitabilityName}
-                    </button>
-                ))}
+                        {isMlLoading ? (
+                            <p className="loading-text">Analyzing your wardrobe...</p>
+                        ) : (
+                            <div className="grid-box">
+                                {smartItems.map((item) => (
+                                    <div
+                                        key={`smart-${item.id}`}
+                                        className={`clothing-item smart-card ${
+                                            formData.clothingItemIDs.includes(item.id) ? "selected" : ""
+                                        }`}
+                                        onClick={() => toggleId("clothingItemIDs", item.id)}
+                                    >
+                                        <div className="recommendation-badge">AI Pick</div>
+                                        {item.imageURL && <img src={item.imageURL} className="item-image" alt={item.name} />}
+                                        <span className="item-name">{item.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
-                <h3>Tags</h3>
-                {tags.map(tag => (
-                    <button
-                        key={tag.id}
-                        type="button"
-                        className={`filter-btn ${formData.tagIDs.includes(tag.id) ? 'active' : ''}`}
-                        onClick={() => toggleId('tagIDs', tag.id)}
-                    >
-                        {tag.tagName}
-                    </button>
-                ))}
+                    <hr className="section-divider" />
+
+                    {/* КАТЕГОРІЇ (Дані з /grouped) */}
+                    {Object.entries(groupedData).map(([categoryName, items]) => (
+                        <div key={categoryName} className="category-block">
+                            <h4>{categoryName}</h4>
+                            <div className="scroll-row"> {/* Наш клас для горизонтального скролу */}
+                                {items.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className={`clothing-item ${
+                                            formData.clothingItemIDs.includes(Number(item.id)) ? "selected" : ""
+                                        }`}
+                                        onClick={() => toggleId("clothingItemIDs", item.id)}
+                                    >
+                                        {item.imageURL && <img src={item.imageURL} className="item-image" alt={item.name} />}
+                                        <span className="item-name">{item.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
-            {/* Центр: Вибрані елементи одягу */}
+            {/* ЦЕНТРАЛЬНА ЧАСТИНА: ПЕРЕГЛЯД */}
             <div className="selected-items">
-                <h3>Selected Items</h3>
+                <h2>New Outfit</h2>
                 <div className="scroll-box">
-                    {formData.clothingItemIDs.length === 0 && <p>Немає вибраних речей</p>}
-                    {formData.clothingItemIDs.map(id => {
-                        const item = clothingItems.find(ci => ci.id === id);
+                    {formData.clothingItemIDs.length === 0 && <p className="empty">Select items</p>}
+                    {formData.clothingItemIDs.map((id) => {
+                        const item = clothingItems.find((i) => i.id === id);
                         return item ? (
-                            <div key={id} className="selected-item item-card">
-                                <div className="item-content">
-                                    <img src={item.imageURL} alt={item.name} className="item-image" />
-                                    <div className="item-name">{item.name}</div>
-                                </div>
-                                <button type="button" onClick={() => removeClothingItem(id)}>🗑</button>
+                            <div key={id} className="selected-item">
+                                <img src={item.imageURL} alt={item.name} />
+                                <span>{item.name}</span>
+                                <button type="button" onClick={() => removeClothingItem(id)}>×</button>
                             </div>
                         ) : null;
                     })}
                 </div>
-                <button type="submit" className="submit-btn">
-                    {outfitId ? 'Оновити аутфіт' : 'Створити аутфіт'}
+                <button type="submit" className="submit-btn" disabled={formData.clothingItemIDs.length === 0}>
+                    {outfitId ? "Update Outfit" : "Save Outfit"}
                 </button>
             </div>
 
-            {/* Права частина: Всі речі користувача */}
-            <div className="clothing-list">
-                <h3>All Clothing Items</h3>
-                <div className="grid-box">
-                    {filteredItems.map(item => (
-                        <div
-                            key={item.id}
-                            className={`clothing-item item-card ${formData.clothingItemIDs.includes(item.id) ? 'selected' : ''}`}
-                            onClick={() => toggleId('clothingItemIDs', item.id)}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <div className="item-content">
-                                <img src={item.imageURL} alt={item.name} className="item-image" />
-                                <div className="item-name">{item.name}</div>
-                            </div>
-                        </div>
-                    ))}
+            {/* ПРАВА ЧАСТИНА: ПАРАМЕТРИ ОБРАЗУ */}
+            <div className="sidebar-filters">
+                <div className="filter-section">
+                    <h3>Outfit Style</h3>
+                    <div className="filter-group">
+                        {stylesList.map((s) => (
+                            <button
+                                key={s.id}
+                                type="button"
+                                className={`filter-btn ${formData.styleIDs.includes(Number(s.id)) ? "active" : ""}`}
+                                onClick={() => toggleId("styleIDs", s.id)}
+                            >
+                                {s.styleName}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="filter-section">
+                    <h3>Seasons</h3>
+                    <div className="filter-group">
+                        {seasons.map((s) => (
+                            <button
+                                key={s.id}
+                                type="button"
+                                className={`filter-btn ${formData.seasonIDs.includes(Number(s.id)) ? "active" : ""}`}
+                                onClick={() => toggleId("seasonIDs", s.id)}
+                            >
+                                {s.seasonName}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="filter-section">
+                    <h3>Target Temp</h3>
+                    <div className="filter-group">
+                        {temps.map((t) => (
+                            <button
+                                key={t.id}
+                                type="button"
+                                className={`filter-btn ${formData.temperatureSuitabilityID === Number(t.id) ? "active" : ""}`}
+                                onClick={() => setFormData(p => ({ ...p, temperatureSuitabilityID: Number(t.id) }))}
+                            >
+                                {t.temperatureSuitabilityName}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </form>

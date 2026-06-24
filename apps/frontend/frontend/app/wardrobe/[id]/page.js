@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from "react";
 import { notFound, useRouter } from "next/navigation";
 import Image from "next/image";
-import api from "../../../api/api"
+import api from "../../../api/api";
+import styles from "./pageID.module.css";
+
 export default function ItemDetailPage({ params }) {
   const router = useRouter();
   const resolvedParams = React.use(params);
@@ -50,32 +52,85 @@ export default function ItemDetailPage({ params }) {
     }
   };
 
-  if (loading) return <p>Завантаження...</p>;
-  if (error) return <p>Сталася помилка при завантаженні елемента</p>;
+  if (loading) return <p className={styles.loading}>Завантаження...</p>;
+  if (error) return <p className={styles.error}>Сталася помилка</p>;
   if (!item) return null;
 
   return (
-      <div style={{ padding: "2rem" }}>
-        <h1>{item.name}</h1>
-        <Image src={item.imageURL} alt={item.name} width={300} height={300} />
-        <ul>
-          <li><strong>Color:</strong> {item.color}</li>
-          <li><strong>Category:</strong> {item.categoryName}</li>
-          <li><strong>Type:</strong> {item.typeName}</li>
-          <li><strong>Temperature Suitability:</strong> {item.temperatureSuitabilityName}</li>
-          <li><strong>Styles:</strong> {item.styleNames.join(", ")}</li>
-          <li><strong>Seasons:</strong> {item.seasonNames.join(", ")}</li>
-          <li><strong>Last Worn Date:</strong> {item.lastWornDate ? new Date(item.lastWornDate).toLocaleDateString() : "N/A"}</li>
-        </ul>
+      <div className={styles.page}>
+        <div className={styles.card}>
 
-        <div style={{ marginTop: "1rem" }}>
-          <button onClick={() => router.push(`/wardrobe/edit/${item.id}`)} style={{ marginRight: "1rem" }}>
-            Edit
-          </button>
+          {/* IMAGE */}
+          <div className={styles.imageBox}>
+            <Image
+                src={item.imageURL}
+                alt={item.name}
+                width={400}
+                height={400}
+                className={styles.image}
+            />
+          </div>
 
-          <button onClick={handleDelete} style={{ backgroundColor: "red", color: "white" }}>
-            Delete
-          </button>
+          {/* INFO */}
+          <div className={styles.info}>
+
+            <h1 className={styles.title}>{item.name}</h1>
+
+            {/* COLOR */}
+            <div className={styles.row}>
+              <span className={styles.label}>Color</span>
+
+              <span
+                  className={styles.colorDot}
+                  style={{ background: item.color }}
+              />
+
+              <span className={styles.text}>{item.color}</span>
+            </div>
+
+            {/* BASIC INFO */}
+            <div className={styles.chips}>
+              <span className={styles.chip}>{item.categoryName}</span>
+              <span className={styles.chip}>{item.typeName}</span>
+              <span className={styles.chip}>{item.temperatureSuitabilityName}</span>
+            </div>
+
+            {/* STYLE */}
+            <div className={styles.chips}>
+              {item.styleNames?.map((s, i) => (
+                  <span key={i} className={styles.chipSoft}>
+                {s}
+              </span>
+              ))}
+            </div>
+
+            {/* SEASON */}
+            <div className={styles.chips}>
+              {item.seasonNames?.map((s, i) => (
+                  <span key={i} className={styles.chipSoft}>
+                {s}
+              </span>
+              ))}
+            </div>
+
+            {/* ACTIONS */}
+            <div className={styles.actions}>
+              <button
+                  onClick={() => router.push(`/wardrobe/edit/${item.id}`)}
+                  className={styles.editBtn}
+              >
+                Edit
+              </button>
+
+              <button
+                  onClick={handleDelete}
+                  className={styles.deleteBtn}
+              >
+                Delete
+              </button>
+            </div>
+
+          </div>
         </div>
       </div>
   );

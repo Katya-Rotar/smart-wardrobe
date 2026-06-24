@@ -1,77 +1,153 @@
+
+/* =========================
+   🌿 GLOBAL LAYOUT
+========================= */
+
 .container {
-  background-color: #375885;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+
+  padding: 40px 20px;
+  background: transparent; /* горошок лишається */
+  font-family: Inter, sans-serif;
 }
 
 .title {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 30px;
 }
+
+/* =========================
+   📦 MAIN LAYOUT
+========================= */
 
 .content {
   display: flex;
-  gap: 50px;
+  gap: 40px;
   max-width: 900px;
   width: 100%;
 }
 
-.uploaded-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-}
+/* =========================
+   📸 PHOTO SECTION
+========================= */
 
 .photo-section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 12px;
 }
 
 .photo-box {
-  width: 250px;
-  height: 250px;
-  background: white;
+  width: 280px;
+  height: 280px;
+
+  border-radius: 18px;
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 8px;
+
+  position: relative;
 }
 
+/* 🔥 важливо: НЕ обрізає, а вміщає */
+.uploaded-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 🔥 замість cover */
+  padding: 10px;
+}
+
+.photo-box:hover {
+  transform: scale(1.02);
+  border-color: #111;
+}
+
+/* upload button text */
 .add-photo-btn {
-  background: none;
-  border: none;
-  color: black;
-  font-size: 18px;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  font-size: 14px;
+  color: #222;
+  cursor: pointer;
+
+  gap: 6px;
 }
 
 .icon {
-  font-size: 36px;
+  font-size: 28px;
 }
+
+.change-photo {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+
+  background: rgba(0,0,0,0.6);
+  color: white;
+
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: 0.2s;
+}
+
+.change-photo:hover {
+  background: rgba(0,0,0,0.85);
+}
+
+/* =========================
+   ➕ SUBMIT BUTTON
+========================= */
 
 .black-btn {
-  background: black;
+  background: rgba(17, 17, 17, 0.95);
   color: white;
-  padding: 8px 20px;
-  border-radius: 8px;
-  margin-top: 10px;
+
+  padding: 10px 26px;
+  border-radius: 999px;
+
+  border: none;
   cursor: pointer;
+
+  font-weight: 500;
+
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+
+  transition: 0.2s ease;
 }
 
-/* Form Section */
+.black-btn:hover {
+  transform: translateY(-2px);
+  background: #000;
+}
+
+/* =========================
+   🧾 FORM
+========================= */
+
 .form-section {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .input-group {
@@ -80,88 +156,255 @@
 }
 
 label {
-  font-size: 16px;
-  margin-bottom: 5px;
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 4px;
 }
 
-input, select {
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
+/* inputs */
+input,
+select {
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  border: 1px solid rgba(0, 0, 0, 0.12);
+
+  background: rgba(255, 255, 255, 0.85);
+
   font-size: 14px;
-  width: 100%;
-  color: black;
+  outline: none;
+
+  transition: 0.2s;
 }
 
-.row {
-  display: flex;
-  gap: 10px;
+input:focus,
+select:focus {
+  border-color: #111;
+  background: #fff;
 }
 
-.row input {
-  flex: 1;
-}
+/* =========================
+   🧩 BUTTON GROUPS
+========================= */
 
 .btn-group {
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
-}
-
-.white-btn {
-  background: white;
-  color: black;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: none;
-}
-
-.white-btn:hover {
-  background: #ddd;
+  gap: 8px;
 }
 
 .btn-group-large {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
 }
 
-.white-btn.active {
-  background-color: #161717; /* яскравий синій фон */
+/* =========================
+   ⚫ DEFAULT BUTTON (BLACK)
+========================= */
+
+.white-btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+
+  background: #111;
   color: white;
-  border-color: #161717;
+
+  border: 1px solid #111;
+
+  font-size: 13px;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
+
+.white-btn:hover {
+  transform: translateY(-2px);
+  background: #1f1f1f;
+}
+
+/* =========================
+   🔵 ACTIVE STATE (BLUE)
+========================= */
+
+.white-btn.active {
+  background: #88AEDD;
+  color: black;
+  border-color: #88AEDD;
+
+  box-shadow: 0 6px 14px rgba(136, 174, 221, 0.4);
+}
+
+/* =========================
+   📱 RESPONSIVE
+========================= */
 
 @media (max-width: 768px) {
   .content {
     flex-direction: column;
-    gap: 30px;
     align-items: center;
   }
 
   .photo-box {
-    width: 200px;
-    height: 200px;
-  }
-
-  .title {
-    font-size: 26px;
+    width: 220px;
+    height: 220px;
   }
 }
 
 @media (max-width: 480px) {
   .photo-box {
-    width: 160px;
-    height: 160px;
-  }
-
-  .black-btn, .white-btn {
-    width: 100%;
-    text-align: center;
+    width: 170px;
+    height: 170px;
   }
 
   .btn-group-large {
     grid-template-columns: 1fr;
   }
+}
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.color-subtitle {
+  font-size: 11px;
+  opacity: 0.6;
+  margin: 6px 0 2px 0;
+}
+
+.colors {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.color-dot {
+  width: 26px;
+  height: 26px;
+
+  border-radius: 50%;
+  border: 2px solid transparent;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.color-dot:hover {
+  transform: scale(1.15);
+}
+
+.color-dot.active {
+  border: 2px solid #111;
+  box-shadow: 0 0 0 3px rgba(136,174,221,0.5);
+}
+
+/* маленька кнопка піпетки */
+.eyedrop-btn {
+  padding: 5px 10px;
+  border-radius: 999px;
+
+  background: #111;
+  color: white;
+
+  border: none;
+  cursor: pointer;
+
+  font-size: 11px;
+
+  width: fit-content;
+
+  transition: 0.2s;
+}
+
+.eyedrop-btn:hover {
+  background: #333;
+}
+
+/* =========================
+   🎨 COLOR PICKER SECTION
+========================= */
+
+.color-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.5); /* легкий фон */
+  padding: 6px;
+  border-radius: 16px;
+  width: fit-content;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.color-picker-wrapper {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.2s ease;
+}
+
+.color-picker-wrapper:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* Робимо стандартний інпут невидимим, але клікабельним по всій площі */
+.color-input {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  opacity: 0; /* повністю ховаємо дизайн браузера */
+  z-index: 10;
+}
+
+.color-preview {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.eyedropper-icon {
+  font-size: 18px;
+  pointer-events: none; /* щоб іконка не заважала кліку */
+  filter: drop-shadow(0 0 2px rgba(255,255,255,0.8));
+}
+
+.color-hex-badge {
+  padding: 4px 12px;
+  background: white;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-hex-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #111;
+}
+
+/* Додаткова підказка (можна додати під input-group якщо треба) */
+.small-info {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+  margin-left: 4px;
 }
